@@ -5,16 +5,15 @@ module.exports = {
   },
   extends: [
     'standard',
-    'typescript'
+    'standard-with-typescript'
   ],
-  parser: '@typescript-eslint/parser',
+  parser: 'babel-eslint',
   parserOptions: {
     ecmaVersion: 12,
-    sourceType: 'module'
+    sourceType: 'module',
+    project: './tsconfig.json'
   },
-  plugins: [
-    '@typescript-eslint'
-  ],
+  plugins: [],
   rules: {},
   ignorePatterns: [
     './dist/**/*.js'
