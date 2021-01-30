@@ -1,7 +1,7 @@
 {
   "name": "branch",
   "description": "The general multi-purpose content management system as this can be.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "src/index.js",
   "author": "Seia-Soto <seia@outlook.kr>",
   "license": "MIT",

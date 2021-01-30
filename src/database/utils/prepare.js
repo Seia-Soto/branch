@@ -1,7 +1,7 @@
 import * as fs from 'fs'
+import * as path from 'path'
 import * as semver from 'semver'
 
-import pkg from '../../../package.json'
 import { createLogger } from '../../utils'
 import * as seed from '../specifications/_seed'
 import knex from '../knex'
@@ -28,49 +28,81 @@ export default async () => {
     return await seedTables()
   }
 
-  current = current[1].value
+  current = current[0].value
 
   debug('following version of `_branch` is installed:', current)
 
-  const migrations = fs.readdirSync('../specifications')
+  const migrations = fs.readdirSync(path.join(__dirname, '../specifications'))
   let versions = []
 
   for (let i = 0, l = migrations.length; i < l; i++) {
     const filename = migrations[i]
-    const version = filename.replace('.schema.js')
+    const version = filename.replace('.schema.js', '')
 
-    if (versions.push(version)) {
-      return false
+    if (semver.valid(version)) {
+      versions.push(version)
     }
   }
 
   versions = versions.sort(semver.compare)
 
-  if (!versions.length) {
+  const lastIndex = versions.length - 1
+
+  if (lastIndex < 0) {
     return debug('canceling task because no schema migration files are available')
   }
 
-  const lastIndex = versions.length - 1
-  let currentIndex = versions.indexOf(pkg.version)
+  let currentIndex = versions.indexOf(current)
 
   if (currentIndex < 0) {
+    debug('fixed current version index to last because database schema was not updated')
+
     currentIndex = lastIndex
   }
   if (currentIndex < lastIndex) {
-    const update = versions[lastIndex]
+    debug('updating sequencely to:', versions[lastIndex])
 
-    debug('new version of database schema found:', update)
+    for (currentIndex += 1; currentIndex < lastIndex + 1; currentIndex++) {
+      const update = versions[currentIndex]
 
-    const migration = await import(update + '.schema.js')
-      .catch(error => {
-        if (error) {
-          debug('failed to import schema script file dynamically')
+      debug('migrating database version to:', update)
 
-          process.exit(1)
-        }
-      })
-    return await migration.deploy()
+      const migration = await import(path.join(__dirname, '../specifications', update + '.schema.js'))
+        .catch(error => {
+          if (error) {
+            debug('failed to import schema script file dynamically:', error)
+            debug('exiting to prevent future data corruption')
+
+            process.exit(1)
+          }
+        })
+      await migration.deploy(knex)
+
+      const updateVersion = async () => {
+        const trx = await knex.transaction()
+
+        trx('_branch')
+          .update({
+            value: update
+          })
+          .where({
+            key: 'revision'
+          })
+          .then(trx.commit)
+          .catch(async error => {
+            await trx.rollback()
+
+            debug('rolled back changes and retrying in 5 second:', error)
+
+            setTimeout(() => updateVersion(knex), 5 * 1000)
+          })
+      }
+
+      await updateVersion()
+    }
+
+    return
   }
 
-  debug('no migration deployment is required')
+  debug('no migration is required')
 }
