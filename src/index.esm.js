@@ -21,7 +21,7 @@ export default (async () => {
 
   server.register(router, { prefix: '/' })
 
-  server.listen(config.application.port, () => {
-    debug('application is listening on port:', config.application.port)
-  })
+  await server.listen(config.application.port)
+
+  debug('application is listening:', server.server.address())
 })()

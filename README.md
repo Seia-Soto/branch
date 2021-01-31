@@ -8,7 +8,9 @@ The general multi-purpose content management system as this can be.
 
 - [Concept](#concept)
 - [Development](#Development)
-- [Database](#database)
+  - [Database](#database)
+  - [Routing](#routing)
+  - [Format](#format)
 - [LICENSE](#license)
 
 ----
@@ -25,6 +27,26 @@ Also, I am currently jumping to backend world again just like the beginning of m
 # Development
 
 Some notes useful to development.
+
+## Structures
+
+> **Important**
+>
+> This project isn't *MVC*.
+
+The overview of current project:
+
+- `src`
+  - `database`
+    - `specifications`: schemas
+    - `utils`
+  - `router`: router code
+    - `user`
+  - `schema`: expressions of attributes
+    - `user`
+  - `structures`: independent functions
+    - `user`
+  - `utils`: shared utils
 
 ## Database
 
@@ -75,6 +97,47 @@ Seed file will export only `deploy` function at all and will remove all existing
 The unique identifiers are used to reduce the difficulty of query.
 Having only primary key can make more hard system to query up in general from my experience.
 However, in recent research about relational database, primary key does and now I know that it's better to use primary key instead of third party UUID to create parties between rows.
+
+## Routing
+
+This section describes how routing is done in current project.
+
+### Validations
+
+To validate values coming from client is done with JSON schema version 7 and Fastify supports it natively.
+Schema validation code need to be completed with routing code because still there is no need to split the folder of controllers and routers at this time.
+Each API handlers are assigned with `handler` property of router and I don't want to split them because it makes project massive.
+Also, router code and controller code is already distributed via folders and files.
+You can see that routers always using `index.js` inside a folder to represent the specific tree of API.
+
+- [Understanding JSON Schema](https://json-schema.org/understanding-json-schema/index.html)
+
+Note that [additional values are removed](https://www.fastify.io/docs/latest/Validation-and-Serialization/#validator-compiler) by ajv package by default to speed up internally inside of Fastify.
+
+## Format
+
+This section describes about specifications of values.
+
+### User
+
+#### `username`
+
+The username of user.
+
+- length: `4-16`
+
+#### `email`
+
+The email of user.
+
+- format: `email`
+- length: `5-320`
+
+#### `password`
+
+The password of user.
+
+- length: `12-`
 
 # LICENSE
 
