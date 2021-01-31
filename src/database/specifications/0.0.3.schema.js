@@ -3,7 +3,7 @@ import debug from './_debug'
 const deploy = async knex => {
   const tables = {
     users: table => {
-      table.dropColumn('identifier', 256)
+      table.dropColumn('identifier')
 
       return table
     }

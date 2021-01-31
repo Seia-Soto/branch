@@ -15,7 +15,6 @@ const deploy = async knex => {
     users: table => {
       table.increments()
 
-      table.text('identifier', 256).uniqe()
       table.text('username', 16).primary()
       table.text('password', 8192)
       table.text('email', 320).unique()

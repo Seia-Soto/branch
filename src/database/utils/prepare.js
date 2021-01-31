@@ -59,50 +59,48 @@ export default async () => {
 
     currentIndex = lastIndex
   }
-  if (currentIndex < lastIndex) {
-    debug('updating sequencely to:', versions[lastIndex])
-
-    for (currentIndex += 1; currentIndex < lastIndex + 1; currentIndex++) {
-      const update = versions[currentIndex]
-
-      debug('migrating database version to:', update)
-
-      const migration = await import(path.join(__dirname, '../specifications', update + '.schema.js'))
-        .catch(error => {
-          if (error) {
-            debug('failed to import schema script file dynamically:', error)
-            debug('exiting to prevent future data corruption')
-
-            process.exit(1)
-          }
-        })
-      await migration.deploy(knex)
-
-      const updateVersion = async () => {
-        const trx = await knex.transaction()
-
-        trx('_branch')
-          .update({
-            value: update
-          })
-          .where({
-            key: 'revision'
-          })
-          .then(trx.commit)
-          .catch(async error => {
-            await trx.rollback()
-
-            debug('rolled back changes and retrying in 5 second:', error)
-
-            setTimeout(() => updateVersion(knex), 5 * 1000)
-          })
-      }
-
-      await updateVersion()
-    }
-
-    return
+  if (currentIndex >= lastIndex) {
+    return debug('no migration is required')
   }
 
-  debug('no migration is required')
+  debug('updating sequencely to:', versions[lastIndex])
+
+  for (currentIndex += 1; currentIndex < lastIndex + 1; currentIndex++) {
+    const update = versions[currentIndex]
+
+    debug('migrating database version to:', update)
+
+    const migration = await import(path.join(__dirname, '../specifications', update + '.schema.js'))
+      .catch(error => {
+        if (error) {
+          debug('failed to import schema script file dynamically:', error)
+          debug('exiting to prevent future data corruption')
+
+          process.exit(1)
+        }
+      })
+    await migration.deploy(knex)
+
+    const updateVersion = async () => {
+      const trx = await knex.transaction()
+
+      trx('_branch')
+        .update({
+          value: update
+        })
+        .where({
+          key: 'revision'
+        })
+        .then(trx.commit)
+        .catch(async error => {
+          await trx.rollback()
+
+          debug('rolled back changes and retrying in 5 second:', error)
+
+          setTimeout(() => updateVersion(knex), 5 * 1000)
+        })
+    }
+
+    await updateVersion()
+  }
 }
