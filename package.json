@@ -1,7 +1,7 @@
 {
   "name": "branch",
   "description": "The general multi-purpose content management system as this can be.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "src/index.js",
   "author": "Seia-Soto <seia@outlook.kr>",
   "license": "MIT",
@@ -20,6 +20,7 @@
     "esm": "^3.2.25",
     "fastify": "^3.11.0",
     "mysql2": "^2.2.5",
+    "nanoid": "^3.1.20",
     "semver": "^7.3.4",
     "v8-compile-cache": "^2.2.0"
   },

@@ -73,12 +73,8 @@ Seed file will export only `deploy` function at all and will remove all existing
 ### Unique identifiers
 
 The unique identifiers are used to reduce the difficulty of query.
-Having only primary key can make more hard system to query up.
-
-- ai/nanoid
-- snowflake
-
-Both implementation of randomness string are good to use, however, still thinking about.
+Having only primary key can make more hard system to query up in general from my experience.
+However, in recent research about relational database, primary key does and now I know that it's better to use primary key instead of third party UUID to create parties between rows.
 
 # LICENSE
 

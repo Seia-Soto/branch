@@ -2,7 +2,10 @@ import os from 'os'
 
 const config = {
   application: {
-    port: 9000
+    port: 9000,
+    retry: {
+      max: 2
+    }
   },
   database: {
     client: {

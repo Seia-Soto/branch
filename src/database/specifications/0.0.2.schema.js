@@ -24,8 +24,18 @@ const deploy = async knex => {
     await knex.schema.createTable(table, tables[table])
   }
 }
-const rollback = async () => {
-  debug('unreachable code!')
+const rollback = async knex => {
+  const tables = {
+    users: table => {
+      table.string('identifier', 256).unique()
+
+      return table
+    }
+  }
+
+  for (const table in tables) {
+    await knex.schema.table(table, tables[table])
+  }
 }
 
 export {
