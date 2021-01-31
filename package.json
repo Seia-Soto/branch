@@ -6,11 +6,10 @@
   "author": "Seia-Soto <seia@outlook.kr>",
   "license": "MIT",
   "scripts": {
-    "slient": "node src",
-    "start": "cross-env DEBUG=branch* node src",
-    "debug": "cross-env DEBUG=* node src",
-    "lint": "eslint . --ext .js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "slient": "node scripts/start",
+    "start": "cross-env DEBUG=branch* node scripts/start",
+    "debug": "cross-env DEBUG=* node scripts/start",
+    "lint": "eslint . --ext .js"
   },
   "keywords": [
     "Content Management System"

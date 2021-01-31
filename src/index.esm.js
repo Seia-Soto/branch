@@ -8,12 +8,12 @@ import router from './router'
 import { config } from './defaults'
 import { createLogger } from './utils'
 
-export default (async () => {
+export default async init => {
   const server = fastify(config.libraries.fastify)
 
   const debug = createLogger()
 
-  if (cluster.isMaster || (Number(process.env.pm_id) % os.cpus().length !== 0)) {
+  if (init || (cluster.isMaster || (Number(process.env.pm_id) % os.cpus().length !== 0))) {
     debug('initiating on non-clustered environment')
 
     await database.utils.prepare()
@@ -21,7 +21,5 @@ export default (async () => {
 
   server.register(router, { prefix: '/' })
 
-  await server.listen(config.application.port)
-
-  debug('application is listening:', server.server.address())
-})()
+  return server
+}
