@@ -11,10 +11,10 @@ const create = async opts => {
   opts._tries = opts._tries || 0
 
   if (opts._tries >= config.application.retry.max) {
-    return false
+    return 0
   }
 
-  const trx = knex.transaction()
+  const trx = await knex.transaction()
 
   try {
     await trx('users')
@@ -22,7 +22,7 @@ const create = async opts => {
         username: opts.username,
         password: opts.password,
         email: opts.email,
-        verification: nanoid(256),
+        verification: nanoid(32),
         avatar: 'default',
         permission: 0
       })
@@ -30,7 +30,7 @@ const create = async opts => {
 
     debug('created new user:', opts.username)
 
-    return opts.username
+    return 1
   } catch (error) {
     debug('failed to create user:', error)
 
