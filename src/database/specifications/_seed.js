@@ -15,11 +15,11 @@ const deploy = async knex => {
     users: table => {
       table.increments()
 
-      table.text('username', 16).unique()
+      table.string('username', 16).unique()
       table.text('password', 8192)
-      table.text('email', 320).unique()
-      table.text('verification', 256)
-      table.text('avatar', 256)
+      table.string('email', 320).unique()
+      table.string('verification', 256)
+      table.string('avatar', 256)
       table.integer('permission', 9)
 
       return table

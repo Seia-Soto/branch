@@ -3,18 +3,26 @@ name: checks
 on: [push]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Setup environment
       run: |
-        mysql -uroot -h127.0.0.1 -proot -e 'CREATE DATABASE IF NOT EXISTS branch;'
+        echo Starting services
+        sudo service mysql start
+
+        echo Setting up
+        sudo mysql -uroot -h127.0.0.1 -proot -e 'CREATE DATABASE IF NOT EXISTS branch;'
+
+        echo Copying config files
+        rm src/defaults.js
+        cp test/config/workflow.js src/defaults.js
     - name: Install dependencies
       run: yarn
     - name: Lint
       run: yarn lint
     - name: Seed
-      run: yarn clean
+      run: database_password=root yarn clean
     - name: Test
-      run: yarn test
+      run: database_password=root yarn test
