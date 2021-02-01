@@ -6,7 +6,7 @@
   "author": "Seia-Soto <seia@outlook.kr>",
   "license": "MIT",
   "scripts": {
-    "slient": "node scripts/start",
+    "silent": "node scripts/start",
     "start": "cross-env DEBUG=branch* node scripts/start",
     "debug": "cross-env DEBUG=* node scripts/start",
     "clean": "cross-env DEBUG=* node scripts/clean",

@@ -8,6 +8,8 @@ The general multi-purpose content management system as this can be.
 
 - [Concept](#concept)
 - [Development](#Development)
+  - [Environment](#environment)
+  - [Scripts](#scripts)
   - [Database](#database)
   - [Routing](#routing)
   - [Format](#format)
@@ -27,6 +29,44 @@ Also, I am currently jumping to backend world again just like the beginning of m
 # Development
 
 Some notes useful to development.
+
+## Environment
+
+This project runs on:
+
+- Node.JS v14 LTS or higher
+- Relational database* (Knex.JS)
+
+## Scripts
+
+This section describe the behavior of each scripts.
+
+### `yarn silent`
+
+Runs the app without any output except for unhandled rejection.
+
+### `yarn start`
+
+Runs the app with only printing *branch* related debug messages.
+
+### `yarn debug`
+
+Runs the app with printing all debugging messages.
+The messages printed by setting `DEBUG=*` will print all things from [`debug`](https://npmjs.com/package/debug) library.
+
+### `yarn clean`
+
+Deploys the database with database seeding script.
+It will remove all existing database before creating new one, which means that losing all previous data.
+
+### `yarn lint`
+
+Runs ESlint on current project for `.js` extensions.
+
+### `yarn test`
+
+Runs jest test on current project.
+It is recommended that you to clean database before running it to reduce unexpected errors.
 
 ## Structures
 
