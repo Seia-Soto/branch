@@ -38,4 +38,15 @@ describe('api:/user', () => {
 
     expect(response.statusCode).toBe(200)
   })
+
+  it('should fail to create duplicated user', async () => {
+    expect.assertions(1)
+
+    const response = await server.inject({
+      ...endpoint,
+      body: JSON.stringify(user)
+    })
+
+    expect(response.statusCode).toBe(400)
+  })
 })

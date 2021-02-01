@@ -1,7 +1,7 @@
 import create from './create'
-import debug from './debug'
+import exists from './exists'
 
 export {
   create,
-  debug
+  exists
 }

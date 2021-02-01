@@ -1,5 +1,5 @@
 import * as user from '../../schema/user'
-import { create } from '../../structures/user'
+import { create, exists } from '../../structures/user'
 
 export default {
   method: 'POST',
@@ -26,8 +26,18 @@ export default {
     }
   },
   handler: async (request, response) => {
+    const { body } = request
+
+    if (await exists({ email: body.email })) {
+      response.status(400)
+
+      return {
+        status: 0
+      }
+    }
+
     const result = {
-      status: await create(request.body)
+      status: await create(body)
     }
 
     if (!result.status) {
