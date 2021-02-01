@@ -9,5 +9,5 @@ module.exports = (async () => {
 
   await deploy(knex)
 
-  process.exit()
+  knex.destroy()
 })()

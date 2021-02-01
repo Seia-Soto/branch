@@ -21,5 +21,13 @@ export default async init => {
 
   server.register(router, { prefix: '/' })
 
+  server.addHook('onClose', (server, done) => {
+    debug('stopping server instance gracefully')
+
+    database.knex.destroy()
+
+    done()
+  })
+
   return server
 }
