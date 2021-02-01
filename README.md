@@ -86,6 +86,7 @@ The overview of current project:
     - `user`
   - `structures`: independent functions
     - `user`
+    - `password`
   - `utils`: shared utils
 
 ## Database
@@ -153,6 +154,12 @@ You can see that routers always using `index.js` inside a folder to represent th
 - [Understanding JSON Schema](https://json-schema.org/understanding-json-schema/index.html)
 
 Note that [additional values are removed](https://www.fastify.io/docs/latest/Validation-and-Serialization/#validator-compiler) by ajv package by default to speed up internally inside of Fastify.
+
+### Resulting
+
+In result schema, I need to keep things in line to make our application safer.
+Because of the danger of XSS attacks, I need to give all things inside of property and I use `status` to indicate if the request successfully processed and use `result` to represent the data of request.
+Also, giving no information to non authorized accessor is important, so don't address any kind of unhandled error which is called Internal Server Error in the result.
 
 ## Format
 

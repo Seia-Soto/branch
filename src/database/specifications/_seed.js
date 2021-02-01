@@ -23,6 +23,15 @@ const deploy = async knex => {
       table.integer('permission', 9)
 
       return table
+    },
+    tokens: table => {
+      table.increments()
+
+      table.string('issuer')
+      table.text('token')
+      table.boolean('expired')
+
+      return table
     }
   }
 

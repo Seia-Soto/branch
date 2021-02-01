@@ -1,5 +1,3 @@
-import debug from './_debug'
-
 const deploy = async knex => {
   const tables = {
     users: table => {
@@ -13,8 +11,8 @@ const deploy = async knex => {
     await knex.schema.table(table, tables[table])
   }
 }
-const rollback = async () => {
-  debug('unreachable code!')
+const rollback = async knex => {
+  await knex.schema.dropTable('tokens')
 }
 
 export {
