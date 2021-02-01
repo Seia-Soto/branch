@@ -7,7 +7,8 @@ module.exports = {
   },
   extends: [
     'standard',
-    'plugin:jest/all'
+    'plugin:jest/recommended',
+    'plugin:jest/style'
   ],
   parser: 'babel-eslint',
   parserOptions: {

@@ -32,6 +32,8 @@ const create = async opts => {
 
     return 1
   } catch (error) {
+    await trx.rollback()
+
     debug('failed to create user:', error)
 
     opts._tries++
