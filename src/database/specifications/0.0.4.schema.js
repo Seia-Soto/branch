@@ -1,15 +1,24 @@
 import debug from './_debug'
 
 const deploy = async knex => {
-  await knex.schema.createTable('tokens', table => {
-    table.increments()
+  const tables = {
+    tokens: table => {
+      table.increments()
 
-    table.string('issuer')
-    table.text('token')
-    table.boolean('expired')
+      table.string('issuer')
+      table.text('token')
+      table.boolean('expired')
 
-    return table
-  })
+      return table
+    }
+  }
+
+  for (const table in tables) {
+    debug('setting up table cleanly:', table)
+
+    await knex.schema.dropTableIfExists(table)
+    await knex.schema.createTable(table, tables[table])
+  }
 }
 const rollback = async () => {
   debug('unreachable code!')

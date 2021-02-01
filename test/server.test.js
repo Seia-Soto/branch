@@ -7,7 +7,9 @@ beforeAll(async () => {
   server = await serverSetup()
 })
 afterAll(() => {
-  server.close()
+  if (server) {
+    server.close()
+  }
 })
 
 describe('api:/user', () => {
