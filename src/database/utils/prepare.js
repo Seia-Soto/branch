@@ -32,7 +32,7 @@ export default async () => {
 
   debug('following version of `_branch` is installed:', current)
 
-  const migrations = fs.readdirSync(path.join(__dirname, '../specifications'))
+  const migrations = fs.readdirSync(path.join(path.resolve('./'), 'src/database/specifications'))
   let versions = []
 
   for (let i = 0, l = migrations.length; i < l; i++) {

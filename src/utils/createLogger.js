@@ -1,9 +1,9 @@
 import debug from 'debug'
 
-import { name } from '../../package.json'
+import pkg from '../../package.json'
 
 export default (domain) => {
-  if (domain) return debug(name + ':' + domain)
+  if (domain) return debug(pkg.name + ':' + domain)
 
-  return debug(name)
+  return debug(pkg.name)
 }

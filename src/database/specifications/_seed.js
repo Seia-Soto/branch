@@ -15,7 +15,7 @@ const deploy = async knex => {
     users: table => {
       table.increments()
 
-      table.text('username', 16).primary()
+      table.text('username', 16).unique()
       table.text('password', 8192)
       table.text('email', 320).unique()
       table.text('verification', 256)
@@ -37,7 +37,7 @@ const deploy = async knex => {
 
   trx('_branch').insert({
     key: 'revision',
-    value: '0.0.2'
+    value: '0.0.3'
   })
     .then(trx.commit)
     .catch(async error => {

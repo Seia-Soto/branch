@@ -15,7 +15,7 @@ const config = {
         user: 'root',
         database: 'branch',
         pool: {
-          min: 0,
+          min: 1,
           max: (os.cpus().length * 2) || 4
         }
       }
