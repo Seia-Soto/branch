@@ -1,4 +1,5 @@
 import * as user from '../../schema/user'
+import { hash } from '../../structures/password'
 import { create, exists } from '../../structures/user'
 
 export default {
@@ -30,6 +31,16 @@ export default {
 
     if (await exists({ email: body.email })) {
       response.status(400)
+
+      return {
+        status: 0
+      }
+    }
+
+    body.password = await hash(body.password)
+
+    if (!body.password) {
+      response.status(500)
 
       return {
         status: 0
