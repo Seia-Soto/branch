@@ -15,7 +15,7 @@ const create = async opts => {
     .then(trx.commit)
     .catch(trx.rollback)
 
-  debug('created new tag:', opts.title, '/type', opts.type)
+  debug('created new tag:', opts.name, '/type', opts.type)
 
   return 1
 }

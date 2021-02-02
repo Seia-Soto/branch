@@ -1,10 +1,14 @@
-import authenticate from '../../../prehandlers/authenticate'
-import { profile } from '../../../structures/user'
+import { profile } from '../../structures/user'
 
 export default {
   method: 'GET',
-  url: '/',
+  url: '/:id',
   schema: {
+    params: {
+      id: {
+        type: 'integer'
+      }
+    },
     response: {
       xxx: {
         type: 'object',
@@ -19,17 +23,15 @@ export default {
       }
     }
   },
-  preHandler: [
-    authenticate
-  ],
   handler: async (request, response) => {
-    const result = await profile(request.user, [
-      'username',
-      'email',
-      'verification',
-      'avatar',
-      'permission'
-    ])
+    const result = await profile(
+      request.params.id,
+      [
+        'username',
+        'verification',
+        'avatar'
+      ]
+    )
 
     result.verification = !!result.verification
 

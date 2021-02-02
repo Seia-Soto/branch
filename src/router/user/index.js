@@ -1,13 +1,15 @@
-import profileRouter from './profile'
 import tokenRouter from './token'
 
 import create from './create'
+import me from './me'
+import profile from './profile'
 
 export default (server, opts, done) => {
   server.register(tokenRouter, { prefix: '/token' })
-  server.register(profileRouter, { prefix: '/profile' })
 
   server.route(create)
+  server.route(me)
+  server.route(profile)
 
   done()
 }

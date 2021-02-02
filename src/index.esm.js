@@ -30,7 +30,11 @@ export default async init => {
   })
 
   server.setErrorHandler(async (error, request) => {
-    debug('server-side error:', error)
+    debug(request.method, request.url, error)
+
+    if (error.validation) {
+      return error
+    }
 
     return {
       status: 0

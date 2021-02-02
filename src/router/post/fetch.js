@@ -1,4 +1,4 @@
-import { fetch } from '../../structures/post'
+import { exists, fetch } from '../../structures/post'
 
 export default {
   method: 'GET',
@@ -24,7 +24,7 @@ export default {
     }
   },
   handler: async (request, response) => {
-    if (!request.params.id) {
+    if (await exists({ id: request.params.id }) < 0) {
       return {
         status: 0
       }

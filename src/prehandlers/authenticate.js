@@ -1,4 +1,7 @@
 import { verify } from '../structures/token'
+import { createLogger } from '../utils'
+
+const debug = createLogger('prehandlers:authenticate')
 
 export default async (request, response) => {
   const { authorization } = request.headers
@@ -17,8 +20,10 @@ export default async (request, response) => {
   try {
     request.user = await verify(authorization)
 
-    if (request.user < 0) throw new Error()
+    if (request.user < 0) return unauthorize()
   } catch (error) {
+    debug('error while authenticating:', error)
+
     return unauthorize()
   }
 }

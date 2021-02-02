@@ -67,6 +67,10 @@ Runs ESlint on current project for `.js` extensions.
 Runs jest test on current project.
 It is recommended that you to clean database before running it to reduce unexpected errors.
 
+### `yarn test:verbose`
+
+Runs jest test on current project with printing server side mesasges to help debug.
+
 ## Structures
 
 > **Important**

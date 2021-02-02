@@ -11,7 +11,8 @@
     "debug": "cross-env DEBUG=* node scripts/start",
     "clean": "cross-env DEBUG=* node scripts/clean",
     "lint": "eslint . --ext .js",
-    "test": "jest --detectOpenHandles --forceExit"
+    "test": "jest --detectOpenHandles --forceExit",
+    "test:verbose": "cross-env DEBUG=branch* jest --detectOpenHandles --forceExit"
   },
   "keywords": [
     "Content Management System"

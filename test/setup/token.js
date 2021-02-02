@@ -1,8 +1,4 @@
-let token
-
 export default async (server, user) => {
-  if (token) return token
-
   const response = await server.inject({
     method: 'POST',
     url: '/user/token',
@@ -14,7 +10,5 @@ export default async (server, user) => {
   })
   const payload = JSON.parse(response.body)
 
-  token = payload.result
-
-  return token
+  return payload.result
 }

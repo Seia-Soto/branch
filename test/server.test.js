@@ -56,6 +56,44 @@ describe('api:/user', () => {
 
     expect(response.statusCode).toBe(400)
   })
+
+  it('GET: (failure) should fail to get profile without authentication', async () => {
+    expect.assertions(1)
+
+    const response = await server.inject({
+      ...endpoint,
+      method: 'GET'
+    })
+
+    expect(response.statusCode).toBe(403)
+  })
+
+  it('GET: should get profile', async () => {
+    expect.assertions(1)
+
+    endpoint.headers.Authorization = await tokenSetup(server, user)
+
+    const response = await server.inject({
+      ...endpoint,
+      method: 'GET'
+    })
+
+    expect(response.statusCode).toBe(200)
+  })
+
+  it('GET: should get profile by username without authentication', async () => {
+    expect.assertions(2)
+
+    const response = await server.inject({
+      ...endpoint,
+      method: 'GET',
+      url: endpoint.url + '/1'
+    })
+    const payload = JSON.parse(response.body)
+
+    expect(response.statusCode).toBe(200)
+    expect(payload.result.email).toBeUndefined()
+  })
 })
 
 describe('api:/user/token', () => {
@@ -77,24 +115,26 @@ describe('api:/user/token', () => {
   })
 
   it('POST: should create token', async () => {
-    expect.assertions(2)
+    expect.assertions(3)
 
     const response = await server.inject({
       ...endpoint,
-      body: JSON.stringify(user)
+      body: user
     })
     const payload = JSON.parse(response.body)
 
     expect(response.statusCode).toBe(200)
     expect(payload.status).toBe(1)
+    expect(payload.result).toBeTruthy()
   })
-
-  endpoint.method = 'DELETE'
 
   it('DELETE: (failure) should fail to delete token without params', async () => {
     expect.assertions(1)
 
-    const response = await server.inject(endpoint)
+    const response = await server.inject({
+      ...endpoint,
+      method: 'DELETE'
+    })
 
     expect(response.statusCode).toBe(400)
   })
@@ -104,61 +144,13 @@ describe('api:/user/token', () => {
 
     const response = await server.inject({
       ...endpoint,
-      body: JSON.stringify(user)
+      method: 'DELETE',
+      body: user
     })
     const payload = JSON.parse(response.body)
 
     expect(response.statusCode).toBe(200)
     expect(payload.status).toBe(1)
-  })
-})
-
-describe('api:/user/profile', () => {
-  const endpoint = {
-    method: 'GET',
-    url: '/user/profile',
-    headers: {
-      'Content-Type': 'application/json',
-      'User-Agent': 'Seia-Soto/branch <test>',
-      Authorization: ''
-    }
-  }
-
-  beforeEach(async () => {
-    endpoint.headers.Authorization = await tokenSetup(server, user)
-  })
-
-  it('GET: (failure) should fail to get profile without authentication', async () => {
-    expect.assertions(1)
-
-    delete endpoint.headers.Authorization
-
-    const response = await server.inject({
-      ...endpoint,
-      body: JSON.stringify(post)
-    })
-
-    expect(response.statusCode).toBe(403)
-  })
-
-  it('GET: should get profile', async () => {
-    expect.assertions(1)
-
-    const response = await server.inject(endpoint)
-
-    expect(response.statusCode).toBe(200)
-  })
-
-  it('GET: should get profile by username', async () => {
-    expect.assertions(1)
-
-    const response = await server.inject({
-      ...endpoint,
-      url: endpoint.url + '/' + user.username,
-      body: JSON.stringify(post)
-    })
-
-    expect(response.statusCode).toBe(200)
   })
 })
 
@@ -168,8 +160,7 @@ describe('api:/post', () => {
     url: '/post',
     headers: {
       'Content-Type': 'application/json',
-      'User-Agent': 'Seia-Soto/branch <test>',
-      Authorization: ''
+      'User-Agent': 'Seia-Soto/branch <test>'
     }
   }
 
@@ -184,7 +175,7 @@ describe('api:/post', () => {
 
     const response = await server.inject({
       ...endpoint,
-      body: JSON.stringify(post)
+      body: post
     })
 
     expect(response.statusCode).toBe(403)
@@ -203,22 +194,30 @@ describe('api:/post', () => {
 
     const response = await server.inject({
       ...endpoint,
-      body: JSON.stringify(post)
+      body: post
     })
 
     expect(response.statusCode).toBe(200)
   })
 
   it('GET: (failure) should fail to get post with invalid id', async () => {
-    expect.assertions(1)
+    expect.assertions(3)
 
-    const response = await server.inject({
+    const invalidType = await server.inject({
       ...endpoint,
       method: 'GET',
       url: endpoint.url + '/invalid'
     })
+    const invalidId = await server.inject({
+      ...endpoint,
+      method: 'GET',
+      url: endpoint.url + '/-1'
+    })
+    const invalidIdPayload = JSON.parse(invalidId.body)
 
-    expect(response.statusCode).toBe(400)
+    expect(invalidType.statusCode).toBe(400)
+    expect(invalidId.statusCode).toBe(200)
+    expect(invalidIdPayload.status).toBe(0)
   })
 
   it('GET: should get post by id', async () => {
@@ -258,7 +257,7 @@ describe('api:/tag', () => {
 
     const response = await server.inject({
       ...endpoint,
-      body: JSON.stringify(tag)
+      body: tag
     })
 
     expect(response.statusCode).toBe(403)
@@ -281,5 +280,74 @@ describe('api:/tag', () => {
     })
 
     expect(response.statusCode).toBe(200)
+  })
+})
+
+describe('api:/tag/action', () => {
+  const endpoint = {
+    method: 'POST',
+    url: '/tag/action',
+    headers: {
+      'Content-Type': 'application/json',
+      'User-Agent': 'Seia-Soto/branch <test>',
+      Authorization: ''
+    }
+  }
+
+  beforeEach(async () => {
+    endpoint.headers.Authorization = await tokenSetup(server, user)
+  })
+
+  it('POST: (failure) should fail to assign tag to post without authentication', async () => {
+    expect.assertions(1)
+
+    delete endpoint.headers.Authorization
+
+    const response = await server.inject({
+      ...endpoint,
+      body: {
+        item: 1,
+        target: 1
+      }
+    })
+
+    expect(response.statusCode).toBe(403)
+  })
+
+  it('POST: (failure) should fail to assign tag to post without params', async () => {
+    expect.assertions(1)
+
+    const response = await server.inject(endpoint)
+
+    expect(response.statusCode).toBe(400)
+  })
+
+  it('POST: should assign tag to post', async () => {
+    expect.assertions(4)
+
+    const response = await server.inject({
+      ...endpoint,
+      body: {
+        item: 1,
+        target: 1
+      }
+    })
+
+    expect(response.statusCode).toBe(200)
+
+    const fetchPost = await server.inject({
+      method: 'GET',
+      url: '/post/1',
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Seia-Soto/branch <test>',
+        Authorization: endpoint.headers.Authorization
+      }
+    })
+    const post = JSON.parse(fetchPost.body)
+
+    expect(fetchPost.statusCode).toBe(200)
+    expect(post.status).toBe(1)
+    expect(post.result.tags[1]).toBe(1)
   })
 })
