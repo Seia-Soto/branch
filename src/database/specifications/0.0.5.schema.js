@@ -9,8 +9,8 @@ const deploy = async knex => {
       table.integer('author')
       table.string('title', 512)
       table.text('content', 'longtext')
-      table.datetime('createdAt').defaultTo(knex.fn.now(6))
-      table.datetime('updatedAt').defaultTo(knex.fn.now(6))
+      table.datetime('createdAt').defaultTo(knex.fn.now())
+      table.datetime('updatedAt').defaultTo(knex.fn.now())
 
       return table
     }
