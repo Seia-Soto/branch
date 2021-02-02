@@ -5,16 +5,16 @@ const create = async opts => {
   'use strict'
 
   opts = opts || {}
-  opts.type = opts.type || 'post'
+  opts.action = 'assign'
 
   const trx = await knex.transaction()
 
-  await trx('posts')
+  await trx('tag_actions')
     .insert(opts)
     .then(trx.commit)
     .catch(trx.rollback)
 
-  debug('created new post:', opts.title)
+  debug('assigned new tag:', opts.item, '/type', opts.type, '/target', opts.target)
 
   return 1
 }

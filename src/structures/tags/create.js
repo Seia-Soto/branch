@@ -12,6 +12,7 @@ const create = async opts => {
   await trx('tags')
     .insert(opts)
     .then(trx.commit)
+    .catch(trx.rollback)
 
   debug('created new tag:', opts.title, '/type', opts.type)
 

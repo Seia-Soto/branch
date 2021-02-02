@@ -20,6 +20,7 @@ const create = async opts => {
       permission: 0
     })
     .then(trx.commit)
+    .catch(trx.rollback)
 
   debug('created new user:', opts.username)
 
