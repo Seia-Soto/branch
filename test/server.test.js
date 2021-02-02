@@ -26,7 +26,7 @@ describe('api:/user', () => {
     }
   }
 
-  it('should fail to create user without params', async () => {
+  it('POST: (failure) should fail to create user without params', async () => {
     expect.assertions(1)
 
     const response = await server.inject(endpoint)
@@ -34,7 +34,7 @@ describe('api:/user', () => {
     expect(response.statusCode).toBe(400)
   })
 
-  it('should create user', async () => {
+  it('POST: should create user', async () => {
     expect.assertions(1)
 
     const response = await server.inject({
@@ -45,7 +45,7 @@ describe('api:/user', () => {
     expect(response.statusCode).toBe(200)
   })
 
-  it('should fail to create duplicated user', async () => {
+  it('POST: (failure) should fail to create duplicated user', async () => {
     expect.assertions(1)
 
     const response = await server.inject({
@@ -67,7 +67,7 @@ describe('api:/user/token', () => {
     }
   }
 
-  it('should fail to create token without params', async () => {
+  it('POST: (failure) should fail to create token without params', async () => {
     expect.assertions(1)
 
     const response = await server.inject(endpoint)
@@ -75,7 +75,7 @@ describe('api:/user/token', () => {
     expect(response.statusCode).toBe(400)
   })
 
-  it('should create token', async () => {
+  it('POST: should create token', async () => {
     expect.assertions(2)
 
     const response = await server.inject({
@@ -90,7 +90,7 @@ describe('api:/user/token', () => {
 
   endpoint.method = 'DELETE'
 
-  it('should fail to delete token without params', async () => {
+  it('DELETE: (failure) should fail to delete token without params', async () => {
     expect.assertions(1)
 
     const response = await server.inject(endpoint)
@@ -98,7 +98,7 @@ describe('api:/user/token', () => {
     expect(response.statusCode).toBe(400)
   })
 
-  it('should delete all token', async () => {
+  it('DELETE: should delete all token', async () => {
     expect.assertions(2)
 
     const response = await server.inject({
@@ -109,6 +109,56 @@ describe('api:/user/token', () => {
 
     expect(response.statusCode).toBe(200)
     expect(payload.status).toBe(1)
+  })
+})
+
+describe('api:/user/profile', () => {
+  const endpoint = {
+    method: 'GET',
+    url: '/user/profile',
+    headers: {
+      'Content-Type': 'application/json',
+      'User-Agent': 'Seia-Soto/branch <test>',
+      Authorization: ''
+    }
+  }
+
+  beforeEach(async () => {
+    endpoint.headers.Authorization = await tokenSetup(server, user)
+  })
+
+  it('GET: (failure) should fail to get profile without authentication', async () => {
+    expect.assertions(1)
+
+    delete endpoint.headers.Authorization
+
+    const response = await server.inject({
+      ...endpoint,
+      body: JSON.stringify(post)
+    })
+
+    expect(response.statusCode).toBe(403)
+  })
+
+  it('GET: should get profile', async () => {
+    expect.assertions(1)
+
+    const response = await server.inject(endpoint)
+
+    expect(response.statusCode).toBe(200)
+  })
+
+  it('GET: should get profile by username', async () => {
+    expect.assertions(1)
+
+    endpoint.url += '/' + user.username
+
+    const response = await server.inject({
+      ...endpoint,
+      body: JSON.stringify(post)
+    })
+
+    expect(response.statusCode).toBe(200)
   })
 })
 
@@ -127,7 +177,7 @@ describe('api:/post', () => {
     endpoint.headers.Authorization = await tokenSetup(server, user)
   })
 
-  it('should fail to create new post without authentication', async () => {
+  it('POST: (failure) should fail to create new post without authentication', async () => {
     expect.assertions(1)
 
     delete endpoint.headers.Authorization
@@ -140,7 +190,7 @@ describe('api:/post', () => {
     expect(response.statusCode).toBe(403)
   })
 
-  it('should fail to create new post without params', async () => {
+  it('POST: (failure) should fail to create new post without params', async () => {
     expect.assertions(1)
 
     const response = await server.inject(endpoint)
@@ -148,7 +198,7 @@ describe('api:/post', () => {
     expect(response.statusCode).toBe(400)
   })
 
-  it('should create new post', async () => {
+  it('POST: should create new post', async () => {
     expect.assertions(1)
 
     const response = await server.inject({

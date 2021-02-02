@@ -12,7 +12,6 @@ The general multi-purpose content management system as this can be.
   - [Scripts](#scripts)
   - [Database](#database)
   - [Routing](#routing)
-  - [Format](#format)
 - [LICENSE](#license)
 
 ----
@@ -160,31 +159,6 @@ Note that [additional values are removed](https://www.fastify.io/docs/latest/Val
 In result schema, I need to keep things in line to make our application safer.
 Because of the danger of XSS attacks, I need to give all things inside of property and I use `status` to indicate if the request successfully processed and use `result` to represent the data of request.
 Also, giving no information to non authorized accessor is important, so don't address any kind of unhandled error which is called Internal Server Error in the result.
-
-## Format
-
-This section describes about specifications of values.
-
-### User
-
-#### `username`
-
-The username of user.
-
-- length: `4-16`
-
-#### `email`
-
-The email of user.
-
-- format: `email`
-- length: `5-320`
-
-#### `password`
-
-The password of user.
-
-- length: `12-`
 
 # LICENSE
 
