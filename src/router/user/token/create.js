@@ -34,7 +34,9 @@ export default {
   handler: async (request, response) => {
     const { body } = request
 
-    if (!await exists({ email: body.email }) || !await validate(body)) {
+    const userId = await exists({ email: body.email })
+
+    if (userId < 0 || !await validate(body)) {
       response.status(400)
 
       return {
@@ -43,9 +45,9 @@ export default {
     }
 
     try {
-      const token = await create(body.email)
+      const token = await create(userId)
 
-      await register(body.email, token)
+      await register(userId, token)
 
       return {
         status: 1,

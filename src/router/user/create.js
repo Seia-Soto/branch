@@ -29,7 +29,7 @@ export default {
   handler: async (request, response) => {
     const { body } = request
 
-    if (await exists({ email: body.email })) {
+    if (await exists({ email: body.email }) >= 0) {
       response.status(400)
 
       return {

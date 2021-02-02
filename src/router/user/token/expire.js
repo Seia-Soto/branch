@@ -31,7 +31,9 @@ export default {
   handler: async (request, response) => {
     const { body } = request
 
-    if (!await exists({ email: body.email }) || !await validate(body)) {
+    const userId = await exists({ email: body.email })
+
+    if (userId < 0 || !await validate(body)) {
       response.status(400)
 
       return {
@@ -40,7 +42,7 @@ export default {
     }
 
     try {
-      await expire(body.email)
+      await expire(userId)
 
       return {
         status: 1
