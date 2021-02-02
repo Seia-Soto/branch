@@ -1,5 +1,9 @@
-import { user } from './mocks'
-import serverSetup from './_server.setup'
+import {
+  post,
+  user
+} from './mocks'
+import serverSetup from './setup/server'
+import tokenSetup from './setup/token'
 
 let server
 
@@ -105,5 +109,53 @@ describe('api:/user/token', () => {
 
     expect(response.statusCode).toBe(200)
     expect(payload.status).toBe(1)
+  })
+})
+
+describe('api:/post', () => {
+  const endpoint = {
+    method: 'POST',
+    url: '/post',
+    headers: {
+      'Content-Type': 'application/json',
+      'User-Agent': 'Seia-Soto/branch <test>',
+      Authorization: ''
+    }
+  }
+
+  beforeEach(async () => {
+    endpoint.headers.Authorization = await tokenSetup(server, user)
+  })
+
+  it('should fail to create new post without authentication', async () => {
+    expect.assertions(1)
+
+    delete endpoint.headers.Authorization
+
+    const response = await server.inject({
+      ...endpoint,
+      body: JSON.stringify(post)
+    })
+
+    expect(response.statusCode).toBe(403)
+  })
+
+  it('should fail to create new post without params', async () => {
+    expect.assertions(1)
+
+    const response = await server.inject(endpoint)
+
+    expect(response.statusCode).toBe(400)
+  })
+
+  it('should create new post', async () => {
+    expect.assertions(1)
+
+    const response = await server.inject({
+      ...endpoint,
+      body: JSON.stringify(post)
+    })
+
+    expect(response.statusCode).toBe(200)
   })
 })
