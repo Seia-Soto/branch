@@ -26,7 +26,7 @@ const config = {
           min: 1,
           max: (os.cpus().length * 2) || 4
         },
-        charset: 'utf8_general_ci'
+        charset: 'utf8'
       },
       useNullAsDefault: true
     }
