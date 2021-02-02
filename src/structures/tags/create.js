@@ -6,6 +6,7 @@ const create = async opts => {
 
   opts = opts || {}
   opts.type = opts.type || 'tag'
+  opts.format = opts.format || 'text'
 
   const trx = await knex.transaction()
 
