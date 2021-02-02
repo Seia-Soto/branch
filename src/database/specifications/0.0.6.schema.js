@@ -35,6 +35,18 @@ const deploy = async knex => {
     await knex.schema.dropTableIfExists(table)
     await knex.schema.createTable(table, tables[table])
   }
+
+  const changes = {
+    users: table => {
+      table.dropColumn('permission')
+
+      return table
+    }
+  }
+
+  for (const table in changes) {
+    await knex.schema.table(table, tables[table])
+  }
 }
 const rollback = async () => {
   debug('unreachable code!')

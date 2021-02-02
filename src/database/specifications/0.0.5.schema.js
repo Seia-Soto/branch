@@ -33,6 +33,18 @@ const rollback = async knex => {
       await knex.schema.dropTable(tableName)
     }
   }
+
+  const changes = {
+    users: table => {
+      table.integer('permission', 9)
+
+      return table
+    }
+  }
+
+  for (const table in changes) {
+    await knex.schema.table(table, tables[table])
+  }
 }
 
 export {

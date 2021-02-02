@@ -20,7 +20,6 @@ const deploy = async knex => {
       table.string('email', 320).unique()
       table.string('verification', 256)
       table.string('avatar', 256)
-      table.integer('permission', 9)
 
       return table
     },
