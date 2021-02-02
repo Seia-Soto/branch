@@ -52,3 +52,35 @@ describe('api:/user', () => {
     expect(response.statusCode).toBe(400)
   })
 })
+
+describe('api:/user/token', () => {
+  const endpoint = {
+    method: 'POST',
+    url: '/user/token',
+    headers: {
+      'Content-Type': 'application/json',
+      'User-Agent': 'Seia-Soto/branch <test>'
+    }
+  }
+
+  it('should fail to create token without params', async () => {
+    expect.assertions(1)
+
+    const response = await server.inject(endpoint)
+
+    expect(response.statusCode).toBe(400)
+  })
+
+  it('should create token', async () => {
+    expect.assertions(2)
+
+    const response = await server.inject({
+      ...endpoint,
+      body: JSON.stringify(user)
+    })
+    const payload = JSON.parse(response.body)
+
+    expect(response.statusCode).toBe(200)
+    expect(payload.status).toBe(1)
+  })
+})
