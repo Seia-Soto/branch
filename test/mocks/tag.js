@@ -1,4 +1,5 @@
 export default {
-  name: '❤',
-  description: 'heart'
+  name: 'heart',
+  description: 'heart',
+  data: '❤'
 }
