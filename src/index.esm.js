@@ -29,5 +29,13 @@ export default async init => {
     done()
   })
 
+  server.setErrorHandler(async (error, request) => {
+    debug('server-side error:', error)
+
+    return {
+      status: 0
+    }
+  })
+
   return server
 }
