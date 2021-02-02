@@ -13,10 +13,10 @@ const verify = async token => {
       token: hash
     })
   if (!item) {
-    return 0
+    return -1
   }
 
-  const payload = jwt.verify(token, config.application.key)
+  const { payload } = jwt.decode(token, config.application.key)
 
   return payload
 }

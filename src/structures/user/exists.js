@@ -6,8 +6,9 @@ const exists = async term => {
   const [user] = await knex('users')
     .select('id')
     .where(term)
+  if (!user) return -1
 
-  return !!user
+  return user.id
 }
 
 export default exists

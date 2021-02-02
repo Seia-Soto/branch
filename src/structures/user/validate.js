@@ -8,8 +8,7 @@ const validate = async opts => {
   const [user] = await knex('users')
     .select('password')
     .where({
-      email: opts.email,
-      verification: 0
+      email: opts.email
     })
   const result = await verify(user.password, opts.password)
 
