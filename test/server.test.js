@@ -83,4 +83,27 @@ describe('api:/user/token', () => {
     expect(response.statusCode).toBe(200)
     expect(payload.status).toBe(1)
   })
+
+  endpoint.method = 'DELETE'
+
+  it('should fail to delete token without params', async () => {
+    expect.assertions(1)
+
+    const response = await server.inject(endpoint)
+
+    expect(response.statusCode).toBe(400)
+  })
+
+  it('should delete all token', async () => {
+    expect.assertions(2)
+
+    const response = await server.inject({
+      ...endpoint,
+      body: JSON.stringify(user)
+    })
+    const payload = JSON.parse(response.body)
+
+    expect(response.statusCode).toBe(200)
+    expect(payload.status).toBe(1)
+  })
 })

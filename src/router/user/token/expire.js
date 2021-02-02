@@ -1,9 +1,9 @@
 import * as user from '../../../schema/user'
-import { create, register } from '../../../structures/token'
+import { expire } from '../../../structures/token'
 import { exists, validate } from '../../../structures/user'
 
 export default {
-  method: 'POST',
+  method: 'DELETE',
   url: '/',
   schema: {
     body: {
@@ -23,9 +23,6 @@ export default {
         properties: {
           status: {
             type: 'integer'
-          },
-          result: {
-            type: 'string'
           }
         }
       }
@@ -43,13 +40,10 @@ export default {
     }
 
     try {
-      const token = await create(body.email)
-
-      await register(body.email, token)
+      await expire(body.email)
 
       return {
-        status: 1,
-        result: token
+        status: 1
       }
     } catch (error) {
       response.status(500)
