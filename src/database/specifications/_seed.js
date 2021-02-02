@@ -55,10 +55,11 @@ const deploy = async knex => {
 
   const trx = await knex.transaction()
 
-  trx('_branch').insert({
-    key: 'revision',
-    value: '0.0.3'
-  })
+  await trx('_branch')
+    .insert({
+      key: 'revision',
+      value: '0.0.5'
+    })
     .then(trx.commit)
     .catch(async error => {
       await trx.rollback()
