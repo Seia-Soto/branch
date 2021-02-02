@@ -13,7 +13,7 @@ const deploy = async knex => {
       return table
     },
     users: table => {
-      table.increments()
+      table.increments() // NOTE: chain;
 
       table.string('username', 16).unique()
       table.text('password')
@@ -27,8 +27,20 @@ const deploy = async knex => {
     tokens: table => {
       table.increments()
 
-      table.string('issuer')
+      table.integer('issuer') // NOTE: chain;
       table.text('token')
+
+      return table
+    },
+    posts: table => {
+      table.increments()
+
+      table.string('type', 256)
+      table.integer('author') // NOTE: chain;
+      table.string('title', 512)
+      table.text('content', 'longtext')
+      table.datetime('createdAt').defaultTo(knex.fn.now(6))
+      table.datetime('updatedAt').defaultTo(knex.fn.now(6))
 
       return table
     }

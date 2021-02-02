@@ -6,7 +6,7 @@ const deploy = async knex => {
       table.increments()
 
       table.string('type', 256)
-      table.integer('authorId')
+      table.integer('author')
       table.string('title', 512)
       table.text('content', 'longtext')
       table.datetime('createdAt').defaultTo(knex.fn.now(6))
