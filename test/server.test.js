@@ -208,16 +208,29 @@ describe('api:/post', () => {
     expect(response.statusCode).toBe(200)
   })
 
-  it('GET: should get post by id', async () => {
+  it('GET: (failure) should fail to get post with invalid id', async () => {
     expect.assertions(1)
 
     const response = await server.inject({
       ...endpoint,
       method: 'GET',
-      url: endpoint.url + '/' + 1
+      url: endpoint.url + '/invalid'
+    })
+
+    expect(response.statusCode).toBe(400)
+  })
+
+  it('GET: should get post by id', async () => {
+    expect.assertions(2)
+
+    const response = await server.inject({
+      ...endpoint,
+      method: 'GET',
+      url: endpoint.url + '/1'
     })
     const payload = JSON.parse(response.body)
 
+    expect(response.statusCode).toBe(200)
     expect(payload.status).toBe(1)
   })
 })
