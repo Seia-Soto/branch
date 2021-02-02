@@ -12,7 +12,9 @@ const deploy = async knex => {
   }
 }
 const rollback = async knex => {
-  await knex.schema.dropTable('tokens')
+  if (await knex.schema.hasTable('tokens')) {
+    await knex.schema.dropTable('tokens')
+  }
 }
 
 export {
