@@ -281,6 +281,39 @@ describe('api:/tag', () => {
 
     expect(response.statusCode).toBe(200)
   })
+
+  it('GET: (failure) should fail to get tag by invalid id', async () => {
+    expect.assertions(2)
+
+    const invalidType = await server.inject({
+      ...endpoint,
+      method: 'GET',
+      url: endpoint.url + '/invalid'
+    })
+    const invalidIdPayload = await server.inject({
+      ...endpoint,
+      method: 'GET',
+      url: endpoint.url + '/-1'
+    })
+
+    expect(invalidType.statusCode).toBe(400)
+    expect(invalidIdPayload.statusCode).toBe(400)
+  })
+
+  it('GET: should get tag by id', async () => {
+    expect.assertions(3)
+
+    const response = await server.inject({
+      ...endpoint,
+      method: 'GET',
+      url: endpoint.url + '/1'
+    })
+    const payload = JSON.parse(response.body)
+
+    expect(response.statusCode).toBe(200)
+    expect(payload.status).toBe(1)
+    expect(payload.result.id).toBe(1)
+  })
 })
 
 describe('api:/tag/action', () => {
