@@ -26,3 +26,8 @@ jobs:
       run: yarn clean
     - name: Test
       run: yarn test
+    - name: Test (verbose)
+      if: ${{ failure() }}
+      run: |
+        yarn clean
+        yarn test:verbose
