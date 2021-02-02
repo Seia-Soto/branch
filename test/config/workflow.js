@@ -3,7 +3,7 @@ import os from 'os'
 const config = {
   application: {
     port: 9000,
-    key: 'test',
+    key: 'github-workflow-test-key',
     retry: {
       max: 2
     }
@@ -24,10 +24,16 @@ const config = {
         pool: {
           min: 1,
           max: (os.cpus().length * 2) || 4
-        }
+        },
+        charset: 'utf8_general_ci'
       },
       useNullAsDefault: true
     }
+  },
+  token: {
+    algorithm: 'HS256',
+    expiresIn: '2 hours',
+    issuer: 'branch.system'
   },
   libraries: {
     fastify: {
