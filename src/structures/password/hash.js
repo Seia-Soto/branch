@@ -3,9 +3,11 @@ import * as argon2 from 'argon2'
 import { config } from '../../defaults'
 
 const hash = async (text, tries) => {
+  'use strict'
+
   tries = tries || 0
 
-  if (tries >= config.application.retry.max) {
+  if (!text || tries >= config.application.retry.max) {
     return false
   }
 

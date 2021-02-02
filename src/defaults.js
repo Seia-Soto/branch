@@ -1,10 +1,17 @@
 import os from 'os'
+import { nanoid } from 'nanoid'
 
 const config = {
   application: {
     port: 9000,
+    key: nanoid(),
     retry: {
       max: 2
+    }
+  },
+  policy: {
+    user: {
+      emailVerificationEnabled: false
     }
   },
   database: {
@@ -21,6 +28,11 @@ const config = {
         }
       }
     }
+  },
+  token: {
+    algorithm: 'HS256',
+    expiresIn: '2 hours',
+    issuer: 'branch.system'
   },
   libraries: {
     fastify: {

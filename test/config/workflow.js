@@ -3,8 +3,14 @@ import os from 'os'
 const config = {
   application: {
     port: 9000,
+    key: 'test',
     retry: {
       max: 2
+    }
+  },
+  policy: {
+    user: {
+      emailVerificationEnabled: false
     }
   },
   database: {

@@ -29,7 +29,6 @@ const deploy = async knex => {
 
       table.string('issuer')
       table.text('token')
-      table.boolean('expired')
 
       return table
     }

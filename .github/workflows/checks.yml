@@ -23,6 +23,6 @@ jobs:
     - name: Lint
       run: yarn lint
     - name: Seed
-      run: database_password=root yarn clean
+      run: yarn clean
     - name: Test
-      run: database_password=root yarn test
+      run: yarn test

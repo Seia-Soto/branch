@@ -2,7 +2,7 @@ import knex from '../src/database/knex'
 import { deploy } from '../src/database/specifications/0.0.1.schema'
 import { prepare } from '../src/database/utils'
 
-describe('api:/user', () => {
+describe('database', () => {
   it('should deploy initial version', async () => {
     expect.assertions(0)
 
