@@ -16,8 +16,7 @@ const create = async opts => {
       password: opts.password,
       email: opts.email,
       verification: nanoid(32),
-      avatar: 'default',
-      permission: 0
+      avatar: 'default'
     })
     .then(trx.commit)
     .catch(trx.rollback)
