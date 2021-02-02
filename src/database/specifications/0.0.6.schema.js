@@ -2,15 +2,28 @@ import debug from './_debug'
 
 const deploy = async knex => {
   const tables = {
-    posts: table => {
+    tags: table => {
       table.increments()
 
       table.string('type', 256)
       table.integer('author')
-      table.string('title', 512)
-      table.text('content', 'longtext')
+      table.string('name', 64)
+      table.string('format', 128)
+      table.text('data', 'longtext')
+      table.text('description', 'longtext')
       table.datetime('createdAt').defaultTo(knex.fn.now())
       table.datetime('updatedAt').defaultTo(knex.fn.now())
+
+      return table
+    },
+    tag_actions: table => {
+      table.increments()
+
+      table.string('action', 32)
+      table.integer('author')
+      table.integer('item')
+      table.integer('target')
+      table.datetime('createdAt').defaultTo(knex.fn.now())
 
       return table
     }
@@ -23,16 +36,8 @@ const deploy = async knex => {
     await knex.schema.createTable(table, tables[table])
   }
 }
-const rollback = async knex => {
-  const tables = ['tags', 'tag_actions']
-
-  for (let i = 0, l = tables.length; i < l; i++) {
-    const tableName = tables[i]
-
-    if (await knex.schema.hasTable(tableName)) {
-      await knex.schema.dropTable(tableName)
-    }
-  }
+const rollback = async () => {
+  debug('unreachable code!')
 }
 
 export {

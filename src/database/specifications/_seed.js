@@ -33,7 +33,7 @@ const deploy = async knex => {
       return table
     },
     posts: table => {
-      table.increments()
+      table.increments() // NOTE: post-chain;
 
       table.string('type', 256)
       table.integer('author') // NOTE: user-chain;
@@ -41,6 +41,31 @@ const deploy = async knex => {
       table.text('content', 'longtext')
       table.datetime('createdAt').defaultTo(knex.fn.now())
       table.datetime('updatedAt').defaultTo(knex.fn.now())
+
+      return table
+    },
+    tags: table => {
+      table.increments() // NOTE: tag-chain;
+
+      table.string('type', 256)
+      table.integer('author') // NOTE: user-chain;
+      table.string('name', 64)
+      table.string('format', 128)
+      table.text('data', 'longtext')
+      table.text('description', 'longtext')
+      table.datetime('createdAt').defaultTo(knex.fn.now())
+      table.datetime('updatedAt').defaultTo(knex.fn.now())
+
+      return table
+    },
+    tag_actions: table => {
+      table.increments()
+
+      table.string('action', 32)
+      table.integer('author') // NOTE: user-chain;
+      table.integer('item') // NOTE: tag-chain;
+      table.integer('target') // NOTE: post-chain;
+      table.datetime('createdAt').defaultTo(knex.fn.now())
 
       return table
     }
