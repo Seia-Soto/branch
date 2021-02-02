@@ -1,6 +1,6 @@
 import authenticate from '../../prehandlers/authenticate'
 import * as tag from '../../schema/tag'
-import { create } from '../../structures/post'
+import { create } from '../../structures/tag'
 
 export default {
   method: 'POST',

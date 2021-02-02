@@ -1,5 +1,6 @@
 import {
   post,
+  tag,
   user
 } from './mocks'
 import serverSetup from './setup/server'
@@ -232,5 +233,53 @@ describe('api:/post', () => {
 
     expect(response.statusCode).toBe(200)
     expect(payload.status).toBe(1)
+  })
+})
+
+describe('api:/tag', () => {
+  const endpoint = {
+    method: 'POST',
+    url: '/tag',
+    headers: {
+      'Content-Type': 'application/json',
+      'User-Agent': 'Seia-Soto/branch <test>',
+      Authorization: ''
+    }
+  }
+
+  beforeEach(async () => {
+    endpoint.headers.Authorization = await tokenSetup(server, user)
+  })
+
+  it('POST: (failure) should fail to create new tag without authentication', async () => {
+    expect.assertions(1)
+
+    delete endpoint.headers.Authorization
+
+    const response = await server.inject({
+      ...endpoint,
+      body: JSON.stringify(tag)
+    })
+
+    expect(response.statusCode).toBe(403)
+  })
+
+  it('POST: (failure) should fail to create new tag without params', async () => {
+    expect.assertions(1)
+
+    const response = await server.inject(endpoint)
+
+    expect(response.statusCode).toBe(400)
+  })
+
+  it('POST: should create new tag', async () => {
+    expect.assertions(1)
+
+    const response = await server.inject({
+      ...endpoint,
+      body: JSON.stringify(tag)
+    })
+
+    expect(response.statusCode).toBe(200)
   })
 })

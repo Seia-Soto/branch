@@ -25,7 +25,8 @@ const config = {
           min: 1,
           max: (os.cpus().length * 2) || 4
         }
-      }
+      },
+      useNullAsDefault: true
     }
   },
   libraries: {

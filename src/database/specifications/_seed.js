@@ -83,7 +83,7 @@ const deploy = async knex => {
   await trx('_branch')
     .insert({
       key: 'revision',
-      value: '0.0.5'
+      value: '0.0.6'
     })
     .then(trx.commit)
     .catch(async error => {
