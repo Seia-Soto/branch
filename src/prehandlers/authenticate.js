@@ -1,24 +1,23 @@
 import { verify } from '../structures/token'
 
 export default async (request, response) => {
-  const { Authorization } = request.headers
+  const { authorization } = request.headers
 
   const unauthorize = () => {
     response.status(403)
-
-    return {
+    response.send({
       status: 0
-    }
+    })
   }
 
-  if (!Authorization) {
+  if (!authorization) {
     return unauthorize()
   }
 
   try {
-    request.user = await verify(Authorization)
+    request.user = await verify(authorization)
 
-    if (!request.user) throw new Error()
+    if (request.user < 0) throw new Error()
   } catch (error) {
     return unauthorize()
   }
