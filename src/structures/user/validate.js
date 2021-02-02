@@ -12,7 +12,7 @@ const validate = async opts => {
     })
   const result = await verify(user.password, opts.password)
 
-  debug('validated user:', opts.identifeir)
+  debug('validated user:', opts.email)
 
   return result
 }

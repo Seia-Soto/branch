@@ -151,10 +151,9 @@ describe('api:/user/profile', () => {
   it('GET: should get profile by username', async () => {
     expect.assertions(1)
 
-    endpoint.url += '/' + user.username
-
     const response = await server.inject({
       ...endpoint,
+      url: endpoint.url + '/' + user.username,
       body: JSON.stringify(post)
     })
 
@@ -207,5 +206,18 @@ describe('api:/post', () => {
     })
 
     expect(response.statusCode).toBe(200)
+  })
+
+  it('GET: should get post by id', async () => {
+    expect.assertions(1)
+
+    const response = await server.inject({
+      ...endpoint,
+      method: 'GET',
+      url: endpoint.url + '/' + 1
+    })
+    const payload = JSON.parse(response.body)
+
+    expect(payload.status).toBe(1)
   })
 })

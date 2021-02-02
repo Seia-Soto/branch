@@ -5,6 +5,7 @@ const create = async opts => {
   'use strict'
 
   opts = opts || {}
+  opts.type = opts.type || 'post'
 
   const trx = await knex.transaction()
 
