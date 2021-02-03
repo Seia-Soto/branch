@@ -1,11 +1,12 @@
 import os from 'os'
+import { nanoid } from 'nanoid'
 
 const config = {
   application: {
     port: 9000,
-    key: 'github-workflow-test-key',
-    retry: {
-      max: 2
+    key: nanoid(),
+    query: {
+      max: 25
     }
   },
   policy: {
