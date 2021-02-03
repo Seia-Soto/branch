@@ -10,6 +10,24 @@ export default {
         minimum: 1
       }
     },
+    query: {
+      term: {
+        type: 'string',
+        enum: [
+          'id',
+          'author'
+        ]
+      },
+      limit: {
+        type: 'integer',
+        minimum: 1,
+        maximum: 25
+      },
+      offset: {
+        type: 'integer',
+        minimum: 1
+      }
+    },
     response: {
       xxx: {
         type: 'object',
@@ -25,9 +43,16 @@ export default {
     }
   },
   handler: async (request, response) => {
-    const { id } = request.params
+    const { term = 'id', limit, offset } = request.query
+    const query = {
+      [term]: request.params.id
+    }
+    const opts = {
+      limit,
+      offset
+    }
 
-    if (await exists({ id }) < 0) {
+    if (await exists(query) < 0) {
       response.status(400)
 
       return {
@@ -37,7 +62,7 @@ export default {
 
     return {
       status: 1,
-      result: await fetch({ id })
+      result: await fetch(query, opts)
     }
   }
 }

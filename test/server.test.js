@@ -269,25 +269,25 @@ describe('api:/post', () => {
     expect(payload.status).toBe(1)
   })
 
-  it('GET: (failure) should fail to list items by setting invalid `max` query', async () => {
+  it('GET: (failure) should fail to list items by setting invalid `limit` query', async () => {
     expect.assertions(2)
 
     const invalidInteger = await server.inject({
       ...endpoint,
       method: 'GET',
-      url: endpoint.url + '?align=recent&max=-1'
+      url: endpoint.url + '?align=recent&limit=-1'
     })
     const invalidType = await server.inject({
       ...endpoint,
       method: 'GET',
-      url: endpoint.url + '?align=recent&max=invalid'
+      url: endpoint.url + '?align=recent&limit=invalid'
     })
 
     expect(invalidInteger.statusCode).toBe(400)
     expect(invalidType.statusCode).toBe(400)
   })
 
-  it('GET: should list only one item by setting `max` query', async () => {
+  it('GET: should list only one item by setting `limit` query', async () => {
     expect.assertions(3)
 
     let size = 5
@@ -302,7 +302,40 @@ describe('api:/post', () => {
     const response = await server.inject({
       ...endpoint,
       method: 'GET',
-      url: endpoint.url + '?align=recent&max=1'
+      url: endpoint.url + '?align=recent&limit=1'
+    })
+    const payload = JSON.parse(response.body)
+
+    expect(response.statusCode).toBe(200)
+    expect(payload.status).toBe(1)
+    expect(payload.result.length).toBeLessThanOrEqual(1)
+  })
+
+  it('GET: (failure) should fail to list items by setting invalid `offset` query', async () => {
+    expect.assertions(2)
+
+    const invalidInteger = await server.inject({
+      ...endpoint,
+      method: 'GET',
+      url: endpoint.url + '?align=recent&offset=-1'
+    })
+    const invalidType = await server.inject({
+      ...endpoint,
+      method: 'GET',
+      url: endpoint.url + '?align=recent&offset=invalid'
+    })
+
+    expect(invalidInteger.statusCode).toBe(400)
+    expect(invalidType.statusCode).toBe(400)
+  })
+
+  it('GET: should list only one item by setting `offset` query', async () => {
+    expect.assertions(3)
+
+    const response = await server.inject({
+      ...endpoint,
+      method: 'GET',
+      url: endpoint.url + '?align=recent&offset=4'
     })
     const payload = JSON.parse(response.body)
 

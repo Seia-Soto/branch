@@ -6,7 +6,8 @@ const config = {
     port: 9000,
     key: nanoid(),
     query: {
-      max: 25
+      limit: 25,
+      offset: 0
     }
   },
   policy: {

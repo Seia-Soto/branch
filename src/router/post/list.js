@@ -6,12 +6,17 @@ export default {
   schema: {
     query: {
       align: {
-        type: 'string'
+        type: 'string',
+        enum: Object.keys(list)
       },
-      max: {
+      limit: {
         type: 'integer',
         minimum: 1,
         maximum: 25
+      },
+      offset: {
+        type: 'integer',
+        minimum: 0
       }
     },
     response: {
@@ -29,9 +34,12 @@ export default {
     }
   },
   handler: async (request, response) => {
-    const { query } = request
-
-    const provider = list[query.align]
+    const { align, limit, offset } = request.query
+    const opts = {
+      limit,
+      offset
+    }
+    const provider = list[align]
 
     if (!provider) {
       response.status(400)
@@ -43,7 +51,7 @@ export default {
 
     return {
       status: 1,
-      result: await provider(query)
+      result: await provider(opts)
     }
   }
 }

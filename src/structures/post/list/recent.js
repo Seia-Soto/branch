@@ -5,11 +5,13 @@ import fetch from '../fetch'
 const recent = async opts => {
   'use strict'
 
-  opts = Object.assign(config.application.query, opts)
+  const { limit, offset } = config.application.query
 
   const posts = await knex('posts')
     .select('id')
-    .limit(opts.max)
+    .orderBy('id', 'desc')
+    .limit(opts.limit || limit)
+    .offset(opts.offset || offset)
 
   for (let i = 0, l = posts.length; i < l; i++) {
     posts[i] = await fetch(posts[i].id)

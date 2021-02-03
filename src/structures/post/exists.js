@@ -6,6 +6,7 @@ const exists = async term => {
   const [post] = await knex('posts')
     .select('id')
     .where(term)
+    .limit(1)
   if (!post) return -1
 
   return post.id
