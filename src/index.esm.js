@@ -28,7 +28,7 @@ export default async init => {
 
     done()
   })
-  server.addHook('onSend', (request, reply, payload, done) => {
+  server.addHook('onSend', async (request, reply, payload) => {
     const invalid =
       (request.is404)
     if (invalid) {
@@ -37,6 +37,8 @@ export default async init => {
     }
 
     reply.header('Access-Control-Allow-Origin', '*')
+
+    return payload
   })
 
   server.setErrorHandler(async (error, request) => {
