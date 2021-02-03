@@ -29,7 +29,7 @@ export default {
     authenticate
   ],
   handler: async (request, response) => {
-    if (await exists({ id: request.params.id }) < 0) {
+    if (await exists({ id: request.params.id, author: request.user }) < 0) {
       return {
         status: 0
       }
