@@ -1,13 +1,17 @@
-import { exists, fetch } from '../../structures/post'
+import { list } from '../../structures/post'
 
 export default {
   method: 'GET',
-  url: '/:id',
+  url: '/',
   schema: {
-    params: {
-      id: {
+    query: {
+      align: {
+        type: 'string'
+      },
+      max: {
         type: 'integer',
-        minimum: 1
+        minimum: 1,
+        maximum: 25
       }
     },
     response: {
@@ -25,15 +29,13 @@ export default {
     }
   },
   handler: async (request, response) => {
-    if (await exists({ id: request.params.id }) < 0) {
-      return {
-        status: 0
-      }
-    }
+    const { query } = request
 
-    const item = await fetch(request.params.id)
+    const provider = list[query.align]
 
-    if (!item) {
+    if (!provider) {
+      response.status(400)
+
       return {
         status: 0
       }
@@ -41,7 +43,7 @@ export default {
 
     return {
       status: 1,
-      result: item
+      result: await provider(query)
     }
   }
 }

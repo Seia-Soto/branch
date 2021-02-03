@@ -6,7 +6,8 @@ export default {
   schema: {
     params: {
       id: {
-        type: 'integer'
+        type: 'integer',
+        minimum: 1
       }
     },
     response: {

@@ -5,8 +5,8 @@ const config = {
   application: {
     port: 9000,
     key: nanoid(),
-    retry: {
-      max: 2
+    query: {
+      max: 25
     }
   },
   policy: {

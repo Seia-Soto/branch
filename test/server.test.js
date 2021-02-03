@@ -210,7 +210,7 @@ describe('api:/post', () => {
   })
 
   it('GET: (failure) should fail to get post with invalid id', async () => {
-    expect.assertions(3)
+    expect.assertions(2)
 
     const invalidType = await server.inject({
       ...endpoint,
@@ -222,11 +222,9 @@ describe('api:/post', () => {
       method: 'GET',
       url: endpoint.url + '/-1'
     })
-    const invalidIdPayload = JSON.parse(invalidId.body)
 
     expect(invalidType.statusCode).toBe(400)
-    expect(invalidId.statusCode).toBe(200)
-    expect(invalidIdPayload.status).toBe(0)
+    expect(invalidId.statusCode).toBe(400)
   })
 
   it('GET: should get post by id', async () => {
@@ -241,6 +239,76 @@ describe('api:/post', () => {
 
     expect(response.statusCode).toBe(200)
     expect(payload.status).toBe(1)
+  })
+
+  it('GET: (failure) should fail to list posts without `align` query', async () => {
+    expect.assertions(2)
+
+    const response = await server.inject({
+      ...endpoint,
+      method: 'GET',
+      url: endpoint.url
+    })
+    const payload = JSON.parse(response.body)
+
+    expect(response.statusCode).toBe(400)
+    expect(payload.status).toBe(0)
+  })
+
+  it('GET: should list of recent posts', async () => {
+    expect.assertions(2)
+
+    const response = await server.inject({
+      ...endpoint,
+      method: 'GET',
+      url: endpoint.url + '?align=recent'
+    })
+    const payload = JSON.parse(response.body)
+
+    expect(response.statusCode).toBe(200)
+    expect(payload.status).toBe(1)
+  })
+
+  it('GET: (failure) should fail to list items by setting invalid `max` query', async () => {
+    expect.assertions(2)
+
+    const invalidInteger = await server.inject({
+      ...endpoint,
+      method: 'GET',
+      url: endpoint.url + '?align=recent&max=-1'
+    })
+    const invalidType = await server.inject({
+      ...endpoint,
+      method: 'GET',
+      url: endpoint.url + '?align=recent&max=invalid'
+    })
+
+    expect(invalidInteger.statusCode).toBe(400)
+    expect(invalidType.statusCode).toBe(400)
+  })
+
+  it('GET: should list only one item by setting `max` query', async () => {
+    expect.assertions(3)
+
+    let size = 5
+
+    while (--size) {
+      await server.inject({
+        ...endpoint,
+        body: post
+      })
+    }
+
+    const response = await server.inject({
+      ...endpoint,
+      method: 'GET',
+      url: endpoint.url + '?align=recent&max=1'
+    })
+    const payload = JSON.parse(response.body)
+
+    expect(response.statusCode).toBe(200)
+    expect(payload.status).toBe(1)
+    expect(payload.result.length).toBeLessThanOrEqual(1)
   })
 })
 
