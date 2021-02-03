@@ -28,6 +28,16 @@ export default async init => {
 
     done()
   })
+  server.addHook('onSend', (request, reply, payload, done) => {
+    const invalid =
+      (request.is404)
+    if (invalid) {
+      request.socket.destroy()
+      done()
+    }
+
+    reply.header('Access-Control-Allow-Origin', '*')
+  })
 
   server.setErrorHandler(async (error, request) => {
     debug(request.method, request.url, error)
