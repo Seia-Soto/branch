@@ -10,14 +10,16 @@ const create = async opts => {
 
   const trx = await knex.transaction()
 
-  await trx('tags')
+  return trx('tags')
     .insert(opts)
-    .then(trx.commit)
+    .then(async id => {
+      await trx.commit()
+
+      debug('created new tag:', opts.name, '/type', opts.type)
+
+      return id[0] || -1
+    })
     .catch(trx.rollback)
-
-  debug('created new tag:', opts.name, '/type', opts.type)
-
-  return 1
 }
 
 export default create

@@ -20,6 +20,9 @@ export default {
         properties: {
           status: {
             type: 'integer'
+          },
+          result: {
+            type: 'integer'
           }
         }
       }
@@ -44,10 +47,9 @@ export default {
 
     body.author = request.user
 
-    await create(body)
-
     return {
-      status: 1
+      status: 1,
+      result: await create(body)
     }
   }
 }

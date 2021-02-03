@@ -21,6 +21,9 @@ export default {
         properties: {
           status: {
             type: 'integer'
+          },
+          result: {
+            type: 'integer'
           }
         }
       }
@@ -48,10 +51,11 @@ export default {
     }
 
     const result = {
-      status: await create(body)
+      status: 1,
+      result: await create(body)
     }
 
-    if (!result.status) {
+    if (result.result < 0) {
       response.status(500)
     }
 

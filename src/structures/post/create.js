@@ -9,14 +9,16 @@ const create = async opts => {
 
   const trx = await knex.transaction()
 
-  await trx('posts')
+  return trx('posts')
     .insert(opts)
-    .then(trx.commit)
+    .then(async id => {
+      await trx.commit()
+
+      debug('created new post:', opts.title)
+
+      return id[0] || -1
+    })
     .catch(trx.rollback)
-
-  debug('created new post:', opts.title)
-
-  return 1
 }
 
 export default create

@@ -10,7 +10,7 @@ const create = async opts => {
 
   const trx = await knex.transaction()
 
-  await trx('users')
+  return trx('users')
     .insert({
       username: opts.username,
       password: opts.password,
@@ -18,12 +18,14 @@ const create = async opts => {
       verification: nanoid(32),
       avatar: 'default'
     })
-    .then(trx.commit)
+    .then(async id => {
+      await trx.commit()
+
+      debug('created new user:', opts.username)
+
+      return id[0] || -1
+    })
     .catch(trx.rollback)
-
-  debug('created new user:', opts.username)
-
-  return 1
 }
 
 export default create

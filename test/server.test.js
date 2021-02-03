@@ -6,6 +6,7 @@ import {
 import serverSetup from './setup/server'
 import tokenSetup from './setup/token'
 
+const suite = {}
 let server
 
 beforeAll(async () => {
@@ -36,14 +37,18 @@ describe('api:/user', () => {
   })
 
   it('POST: should create user', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
 
     const response = await server.inject({
       ...endpoint,
       body: JSON.stringify(user)
     })
+    const payload = JSON.parse(response.payload)
+
+    suite.user = payload.result
 
     expect(response.statusCode).toBe(200)
+    expect(payload.result).toBeDefined()
   })
 
   it('POST: (failure) should fail to create duplicated user', async () => {
@@ -87,7 +92,7 @@ describe('api:/user', () => {
     const response = await server.inject({
       ...endpoint,
       method: 'GET',
-      url: endpoint.url + '/1'
+      url: endpoint.url + '/' + suite.user
     })
     const payload = JSON.parse(response.body)
 
@@ -190,14 +195,18 @@ describe('api:/post', () => {
   })
 
   it('POST: should create new post', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
 
     const response = await server.inject({
       ...endpoint,
       body: post
     })
+    const payload = JSON.parse(response.body)
+
+    suite.post = payload.result
 
     expect(response.statusCode).toBe(200)
+    expect(payload.result).toBeDefined()
   })
 
   it('GET: (failure) should fail to get post with invalid id', async () => {
@@ -226,7 +235,7 @@ describe('api:/post', () => {
     const response = await server.inject({
       ...endpoint,
       method: 'GET',
-      url: endpoint.url + '/1'
+      url: endpoint.url + '/' + suite.post
     })
     const payload = JSON.parse(response.body)
 
@@ -272,14 +281,18 @@ describe('api:/tag', () => {
   })
 
   it('POST: should create new tag', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
 
     const response = await server.inject({
       ...endpoint,
       body: JSON.stringify(tag)
     })
+    const payload = JSON.parse(response.body)
+
+    suite.tag = payload.result
 
     expect(response.statusCode).toBe(200)
+    expect(payload.result).toBeDefined()
   })
 
   it('GET: (failure) should fail to get tag by invalid id', async () => {
@@ -306,7 +319,7 @@ describe('api:/tag', () => {
     const response = await server.inject({
       ...endpoint,
       method: 'GET',
-      url: endpoint.url + '/1'
+      url: endpoint.url + '/' + suite.tag
     })
     const payload = JSON.parse(response.body)
 
