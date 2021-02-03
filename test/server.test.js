@@ -310,6 +310,44 @@ describe('api:/post', () => {
     expect(payload.status).toBe(1)
     expect(payload.result.length).toBeLessThanOrEqual(1)
   })
+
+  it('DELETE: (failure) should fail to remove new post without authentication', async () => {
+    expect.assertions(1)
+
+    delete endpoint.headers.Authorization
+
+    const response = await server.inject({
+      ...endpoint,
+      method: 'DELETE',
+      url: endpoint.url + '/' + suite.post
+    })
+
+    expect(response.statusCode).toBe(403)
+  })
+
+  it('DELETE: (failure) should fail to remove post without params', async () => {
+    expect.assertions(1)
+
+    const response = await server.inject({
+      ...endpoint,
+      method: 'DELETE',
+      url: endpoint.url + '/' + suite.post
+    })
+
+    expect(response.statusCode).toBe(400)
+  })
+
+  it('DELETE: should remove post', async () => {
+    expect.assertions(1)
+
+    const response = await server.inject({
+      ...endpoint,
+      method: 'DELETE',
+      url: endpoint.url + '/' + suite.post
+    })
+
+    expect(response.statusCode).toBe(200)
+  })
 })
 
 describe('api:/tag', () => {
@@ -415,13 +453,24 @@ describe('api:/tag/action', () => {
   it('POST: (failure) should fail to assign tag to post without authentication', async () => {
     expect.assertions(1)
 
+    // NOTE: create new post;
+    const postCreation = await server.inject({
+      ...endpoint,
+      method: 'POST',
+      url: '/post',
+      body: post
+    })
+    const payload = JSON.parse(postCreation.body)
+
+    suite.post = payload.result
+
     delete endpoint.headers.Authorization
 
     const response = await server.inject({
       ...endpoint,
       body: {
         item: 1,
-        target: 1
+        target: suite.post
       }
     })
 
@@ -443,7 +492,7 @@ describe('api:/tag/action', () => {
       ...endpoint,
       body: {
         item: 1,
-        target: 1
+        target: suite.post
       }
     })
 
@@ -451,7 +500,7 @@ describe('api:/tag/action', () => {
 
     const fetchPost = await server.inject({
       method: 'GET',
-      url: '/post/1',
+      url: '/post/' + suite.post,
       headers: {
         'Content-Type': 'application/json',
         'User-Agent': 'Seia-Soto/branch <test>',
