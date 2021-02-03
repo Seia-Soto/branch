@@ -33,7 +33,8 @@ export default async init => {
       (request.is404)
     if (invalid) {
       request.socket.destroy()
-      done()
+
+      return null
     }
 
     reply.header('Access-Control-Allow-Origin', '*')
