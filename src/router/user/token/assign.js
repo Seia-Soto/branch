@@ -13,11 +13,17 @@ export default {
       type: 'object',
       properties: {
         email: user.email,
-        password: user.password
+        password: user.password,
+        next: {
+          type: 'string',
+          minLength: 'https://a.b'.length,
+          maxLength: 256
+        }
       },
       required: [
         'email',
-        'password'
+        'password',
+        'next'
       ]
     },
     response: {
@@ -53,6 +59,10 @@ export default {
       await register(userId, token)
 
       response.setCookie(identifier, token, options)
+
+      if (body.next) {
+        return response.redirect(302, body.next)
+      }
 
       return {
         status: 1

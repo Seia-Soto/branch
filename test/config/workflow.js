@@ -14,6 +14,8 @@ const config = {
       options: {
         httpOnly: true,
         signed: true,
+        secure: true,
+        sameSite: 'strict',
         path: '/'
       }
     }
@@ -49,6 +51,16 @@ const config = {
     fastify: {
       logger: false
     },
+    cors: {
+      origin: '*',
+      methods: [
+        'GET', 'POST', 'DELETE'
+      ],
+      credentials: true,
+      maxAge: 60 * 15,
+      preflightContinue: true,
+      hideOptionsRoute: true
+    },
     helmet: {
       expectCt: {
         enfore: true
@@ -68,7 +80,7 @@ const config = {
         action: 'deny'
       },
       permittedCrossDomainPolicies: {
-        permittedPolicies: 'none'
+        permittedPolicies: 'by-content-only'
       }
     }
   }

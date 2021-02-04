@@ -22,7 +22,7 @@ export default async init => {
     await database.utils.prepare()
   }
 
-  server.register(fastifyCors)
+  server.register(fastifyCors, config.libraries.cors)
   server.register(fastifyHelmet, config.libraries.helmet)
   server.register(fastifyCookie, { secret: config.application.key })
   server.register(router, { prefix: '/' })
