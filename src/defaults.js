@@ -8,6 +8,14 @@ const config = {
     query: {
       limit: 25,
       offset: 0
+    },
+    cookie: {
+      identifier: '__Host-identifier',
+      options: {
+        httpOnly: true,
+        signed: true,
+        path: '/'
+      }
     }
   },
   policy: {

@@ -1,10 +1,15 @@
 import { verify } from '../structures/token'
 import { createLogger } from '../utils'
+import { config } from '../defaults'
 
 const debug = createLogger('prehandlers:authenticate')
 
+const { identifier } = config.application.cookie
+
 export default async (request, response) => {
-  const { authorization } = request.headers
+  const authorization =
+    request.headers.authorization ||
+    request.cookies[identifier]
 
   const unauthorize = () => {
     response.status(403)

@@ -2,6 +2,9 @@ import * as cluster from 'cluster'
 import * as os from 'os'
 // NOTE: thirdparties;
 import fastify from 'fastify'
+import fastifyCors from 'fastify-cors'
+import fastifyHelmet from 'fastify-helmet'
+import fastifyCookie from 'fastify-cookie'
 
 import * as database from './database'
 import router from './router'
@@ -19,6 +22,9 @@ export default async init => {
     await database.utils.prepare()
   }
 
+  server.register(fastifyCors)
+  server.register(fastifyHelmet)
+  server.register(fastifyCookie, { secret: config.application.key })
   server.register(router, { prefix: '/' })
 
   server.addHook('onClose', (server, done) => {
@@ -36,8 +42,6 @@ export default async init => {
 
       return null
     }
-
-    reply.header('Access-Control-Allow-Origin', '*')
 
     return payload
   })

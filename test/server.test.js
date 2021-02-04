@@ -133,6 +133,21 @@ describe('api:/user/token', () => {
     expect(payload.result).toBeTruthy()
   })
 
+  it('POST: should create token and assign it via cookie header', async () => {
+    expect.assertions(3)
+
+    const response = await server.inject({
+      ...endpoint,
+      url: endpoint.url + '/assign',
+      body: user
+    })
+    const payload = JSON.parse(response.body)
+
+    expect(response.statusCode).toBe(200)
+    expect(response.headers['set-cookie']).toBeTruthy()
+    expect(payload.status).toBe(1)
+  })
+
   it('DELETE: (failure) should fail to delete token without params', async () => {
     expect.assertions(1)
 
