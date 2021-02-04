@@ -52,9 +52,15 @@ const config = {
       logger: false
     },
     cors: {
-      origin: '*',
+      origin: (origin, callback) => {
+        if (/(http:\/\/localhost|https:\/\/[\w\d.\-_]*seia\.io)/.test(origin)) {
+          return callback(null, true)
+        }
+
+        callback(new Error('Cross Origin Access was not allowed from: ' + origin))
+      },
       methods: [
-        'GET', 'POST', 'DELETE'
+        'GET', 'POST', 'DELETE', 'PUT'
       ],
       credentials: true,
       maxAge: 60 * 15,
