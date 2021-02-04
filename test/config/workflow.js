@@ -8,6 +8,14 @@ const config = {
     query: {
       limit: 25,
       offset: 0
+    },
+    cookie: {
+      identifier: '__Host-identifier',
+      options: {
+        httpOnly: true,
+        signed: true,
+        path: '/'
+      }
     }
   },
   policy: {
@@ -40,6 +48,28 @@ const config = {
   libraries: {
     fastify: {
       logger: false
+    },
+    helmet: {
+      expectCt: {
+        enfore: true
+      },
+      referrerPolicy: {
+        policy: 'no-referrer'
+      },
+      hsts: {
+        maxAge: 15552000,
+        includeSubDomains: true,
+        preload: true
+      },
+      dnsPrefetchControl: {
+        allow: true
+      },
+      frameguard: {
+        action: 'deny'
+      },
+      permittedCrossDomainPolicies: {
+        permittedPolicies: 'none'
+      }
     }
   }
 }
