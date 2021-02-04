@@ -133,7 +133,7 @@ describe('api:/user/token', () => {
     expect(payload.result).toBeTruthy()
   })
 
-  it('POST: should create token and assign it via cookie header', async () => {
+  it('/assign POST: should create token and assign it via cookie header', async () => {
     expect.assertions(3)
 
     const response = await server.inject({

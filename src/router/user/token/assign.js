@@ -16,14 +16,13 @@ export default {
         password: user.password,
         next: {
           type: 'string',
-          minLength: 'https://a.b'.length,
+          minLength: 'http://a.b'.length,
           maxLength: 256
         }
       },
       required: [
         'email',
-        'password',
-        'next'
+        'password'
       ]
     },
     response: {

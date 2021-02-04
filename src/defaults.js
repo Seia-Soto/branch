@@ -80,7 +80,7 @@ const config = {
         action: 'deny'
       },
       permittedCrossDomainPolicies: {
-        permittedPolicies: 'by-content-only'
+        permittedPolicies: 'by-content-type'
       }
     }
   }

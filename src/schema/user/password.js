@@ -1,5 +1,5 @@
 export default {
   type: 'string',
-  pattern: '^.*(.*[\\d])(.*[\\W]).*$',
+  pattern: '^.*(?=.*[\\d])(?=.*[\\W]).*$',
   minLength: 12
 }
