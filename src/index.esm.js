@@ -23,7 +23,7 @@ export default async init => {
   }
 
   server.register(fastifyCors)
-  server.register(fastifyHelmet)
+  server.register(fastifyHelmet, config.libraries.helmet)
   server.register(fastifyCookie, { secret: config.application.key })
   server.register(router, { prefix: '/' })
 
