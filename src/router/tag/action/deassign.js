@@ -3,7 +3,7 @@ import * as post from '../../../structures/post'
 import * as tag from '../../../structures/tag'
 
 export default {
-  method: 'POST',
+  method: 'DELETE',
   url: '/',
   schema: {
     body: {
@@ -41,7 +41,7 @@ export default {
     const valid =
       (await tag.exists({ id: body.item, type: 'tag', format: 'text' }) >= 0) &&
       (await post.exists({ id: body.target, author: request.user }) >= 0) &&
-      (await tag.isAssigned({ item: body.item, target: body.target }) < 0)
+      (await tag.isAssigned({ item: body.item, target: body.target }) >= 0)
     if (!valid) {
       response.status(400)
 
@@ -52,7 +52,7 @@ export default {
 
     body.author = request.user
 
-    await tag.assign(body)
+    await tag.deassign(body)
 
     return {
       status: 1
