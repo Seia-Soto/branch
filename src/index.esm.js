@@ -52,6 +52,11 @@ export default async init => {
     if (error.validation) {
       return error
     }
+    if (error.unsafe) {
+      request.socket.destroy()
+
+      return null
+    }
 
     return {
       status: 0

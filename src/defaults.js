@@ -52,7 +52,17 @@ const config = {
       logger: false
     },
     cors: {
-      origin: '*',
+      origin: (origin, callback) => {
+        if (/(http:\/\/localhost|https:\/\/[\w\d.\-_]*seia\.io)/.test(origin)) {
+          return callback(null, true)
+        }
+
+        const error = new Error('Cross Origin Access was not allowed from: ' + origin)
+
+        error.unsafe = true
+
+        callback(error)
+      },
       methods: [
         'GET', 'POST', 'DELETE'
       ],
