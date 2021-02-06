@@ -43,7 +43,7 @@ const rollback = async knex => {
   }
 
   for (const table in changes) {
-    await knex.schema.table(table, tables[table])
+    await knex.schema.table(table, changes[table])
   }
 }
 
