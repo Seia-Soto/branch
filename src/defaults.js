@@ -92,6 +92,10 @@ const config = {
       permittedCrossDomainPolicies: {
         permittedPolicies: 'by-content-type'
       }
+    },
+    lru: {
+      max: 250,
+      maxAge: 1000 * 20
     }
   }
 }

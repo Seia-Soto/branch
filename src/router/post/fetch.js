@@ -1,4 +1,5 @@
-import { exists, fetch } from '../../structures/post'
+import { getById } from '../../cache/posts'
+import { exists } from '../../structures/post'
 
 export default {
   method: 'GET',
@@ -31,7 +32,7 @@ export default {
       }
     }
 
-    const item = await fetch(request.params.id)
+    const item = await getById(request.params.id)
 
     if (!item) {
       return {

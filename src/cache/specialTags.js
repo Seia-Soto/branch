@@ -2,8 +2,8 @@ import knex from '../database/knex'
 
 export const cache = {}
 
-export const getTagId = async (type, name) => {
-  const key = type + '_' + name
+export const getById = async (type, name) => {
+  const key = type + ':' + name
 
   if (cache[key]) {
     return cache[key]

@@ -1,4 +1,8 @@
+import authenticateOptional from '../../prehandlers/authenticateOptional'
+import { isAssigned } from '../../structures/tag'
 import { list } from '../../structures/post'
+import * as posts from '../../cache/posts'
+import * as specialTags from '../../cache/specialTags'
 
 export default {
   method: 'GET',
@@ -37,6 +41,9 @@ export default {
       }
     }
   },
+  preHandler: [
+    authenticateOptional
+  ],
   handler: async (request, response) => {
     const { align, limit, offset, ...query } = request.query
     const opts = {
@@ -53,9 +60,33 @@ export default {
       }
     }
 
+    const posts = await provider(opts, query)
+    const publicTagId = await specialTags.getById('post_property', 'public')
+
+    const result = []
+
+    for (let i = 0, l = result.length; i < l; i++) {
+      const item = posts[i]
+      const isPublic = await isAssigned({ id: publicTagId }) >= 0
+
+      if (isPublic) {
+        result.push(item)
+
+        continue
+      }
+
+      const isAccessible =
+        (request.user >= 0) &&
+        (!isPublic) &&
+        (request.user === await posts.getById(item).author)
+      if (isAccessible) {
+        result.push(item)
+      }
+    }
+
     return {
       status: 1,
-      result: await provider(opts, query)
+      result
     }
   }
 }
