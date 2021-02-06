@@ -87,7 +87,7 @@ const deploy = async knex => {
   for (let i = 0, l = postProperties.length; i < l; i++) {
     const property = postProperties[i]
 
-    trx('tags')
+    await trx('tags')
       .insert({
         type: 'post_property',
         author: -1,
@@ -98,10 +98,10 @@ const deploy = async knex => {
       })
   }
 
-  trx('_branch')
+  await trx('_branch')
     .insert({
       key: 'revision',
-      value: '0.0.6'
+      value: '0.0.7'
     })
 
   await trx.commit()
