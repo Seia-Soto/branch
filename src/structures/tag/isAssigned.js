@@ -5,7 +5,7 @@ const isAssigned = async term => {
 
   term.action = 'assign'
 
-  const [tag] = await knex('tags')
+  const [tag] = await knex('tag_actions')
     .select('id')
     .where(term)
     .limit(1)

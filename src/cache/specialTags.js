@@ -10,6 +10,7 @@ export const getTagId = async (type, name) => {
   }
 
   const [tag] = await knex('tags')
+    .select('id')
     .where({
       type,
       name
