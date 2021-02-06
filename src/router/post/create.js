@@ -13,8 +13,7 @@ export default {
         content: post.content
       },
       required: [
-        'title',
-        'content'
+        'title'
       ]
     },
     response: {

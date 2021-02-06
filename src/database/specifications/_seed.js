@@ -28,6 +28,7 @@ const deploy = async knex => {
 
       table.integer('issuer') // NOTE: user-chain;
       table.text('token')
+      table.datetime('createdAt').defaultTo(knex.fn.now())
 
       return table
     },
@@ -79,12 +80,31 @@ const deploy = async knex => {
 
   const trx = await knex.transaction()
 
-  await trx('_branch')
+  debug('inserting default post properties')
+
+  const postProperties = ['public']
+
+  for (let i = 0, l = postProperties.length; i < l; i++) {
+    const property = postProperties[i]
+
+    trx('tags')
+      .insert({
+        type: 'post_property',
+        author: -1,
+        name: property,
+        format: 'text',
+        data: null,
+        description: null
+      })
+  }
+
+  trx('_branch')
     .insert({
       key: 'revision',
       value: '0.0.6'
     })
-    .then(trx.commit)
+
+  await trx.commit()
     .catch(async error => {
       await trx.rollback()
 

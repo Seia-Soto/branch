@@ -17,6 +17,10 @@ export default {
       offset: {
         type: 'integer',
         minimum: 0
+      },
+      user: {
+        type: 'integer',
+        minimum: 0
       }
     },
     response: {
@@ -34,7 +38,7 @@ export default {
     }
   },
   handler: async (request, response) => {
-    const { align, limit, offset } = request.query
+    const { align, limit, offset, ...query } = request.query
     const opts = {
       limit,
       offset
@@ -51,7 +55,7 @@ export default {
 
     return {
       status: 1,
-      result: await provider(opts)
+      result: await provider(opts, query)
     }
   }
 }
