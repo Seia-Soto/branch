@@ -36,7 +36,7 @@ export default {
       (await exists({ id })) &&
       (
         (await isPublic(id)) ||
-        (request.user && await isAccessible(request.user, request))
+        (request.user && await isAccessible(request.user, id))
       )
     if (!isAvailable) {
       return {
