@@ -12,10 +12,9 @@ export default async (request, response) => {
     request.cookies[identifier]
 
   const unauthorize = () => {
-    response.status(403)
-    response.send({
-      status: 0
-    })
+    request.socket.destroy()
+
+    return
   }
 
   if (!authorization) {

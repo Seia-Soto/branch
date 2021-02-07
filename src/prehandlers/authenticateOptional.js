@@ -12,7 +12,9 @@ export default async (request, response) => {
     request.cookies[identifier]
 
   try {
-    request.user = await verify(authorization)
+    if (authorization) {
+      request.user = await verify(authorization)
+    }
   } catch (error) {
     debug('(optional) error while authenticating:', error.message)
   }
