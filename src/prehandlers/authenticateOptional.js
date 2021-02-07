@@ -14,6 +14,6 @@ export default async (request, response) => {
   try {
     request.user = await verify(authorization)
   } catch (error) {
-    debug('(optional) error while authenticating:', error.name)
+    debug('(optional) error while authenticating:', error.message)
   }
 }

@@ -14,5 +14,5 @@ export const getById = async id => {
 
   cache.set(id, post)
 
-  return post
+  return cache.get(id)
 }

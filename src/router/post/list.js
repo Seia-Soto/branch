@@ -60,13 +60,13 @@ export default {
       }
     }
 
-    const posts = await provider(opts, query)
+    const articles = await provider(opts, query)
     const publicTagId = await specialTags.getById('post_property', 'public')
 
     const result = []
 
-    for (let i = 0, l = result.length; i < l; i++) {
-      const item = posts[i]
+    for (let i = 0, l = articles.length; i < l; i++) {
+      const item = articles[i]
       const isPublic = await isAssigned({ id: publicTagId }) >= 0
 
       if (isPublic) {
@@ -76,9 +76,7 @@ export default {
       }
 
       const isAccessible =
-        (request.user >= 0) &&
-        (!isPublic) &&
-        (request.user === await posts.getById(item).author)
+        (request.user === (await posts.getById(item)).author)
       if (isAccessible) {
         result.push(item)
       }
