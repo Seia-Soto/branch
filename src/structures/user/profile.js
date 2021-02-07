@@ -10,7 +10,7 @@ const profile = async (id, fields) => {
     .where({
       id
     })
-  if (!user) return { id: -1 }
+  if (!user) return { id: 0 }
 
   return user
 }

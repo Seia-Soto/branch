@@ -39,9 +39,9 @@ export default {
     const { body } = request
 
     const valid =
-      (await tag.exists({ id: body.item, type: 'post_property', format: 'text' }) >= 0) &&
-      (await post.exists({ id: body.target, author: request.user }) >= 0) &&
-      (await tag.isAssigned({ item: body.item, target: body.target }) < 0)
+      (await tag.exists({ id: body.item, type: 'post_property', format: 'text' })) &&
+      (await post.exists({ id: body.target, author: request.user })) &&
+      (await tag.isAssigned({ item: body.item, target: body.target }))
     if (!valid) {
       response.status(400)
 

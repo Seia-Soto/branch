@@ -17,7 +17,7 @@ const create = async opts => {
 
       debug('created new tag:', opts.name, '/type', opts.type)
 
-      return id[0] || -1
+      return id[0] || 0
     })
     .catch(trx.rollback)
 }

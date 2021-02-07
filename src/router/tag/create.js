@@ -37,7 +37,7 @@ export default {
     body.type = 'tag'
     body.format = 'text'
 
-    if (await exists({ name: body.name }) >= 0) {
+    if (await exists({ name: body.name })) {
       response.status(400)
 
       return {

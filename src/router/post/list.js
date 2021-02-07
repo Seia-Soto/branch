@@ -1,8 +1,5 @@
 import authenticateOptional from '../../prehandlers/authenticateOptional'
-import { isAssigned } from '../../structures/tag'
-import { list } from '../../structures/post'
-import * as posts from '../../cache/posts'
-import * as specialTags from '../../cache/specialTags'
+import { list, isPublic, isAccessible } from '../../structures/post'
 
 export default {
   method: 'GET',
@@ -61,23 +58,15 @@ export default {
     }
 
     const articles = await provider(opts, query)
-    const publicTagId = await specialTags.getById('post_property', 'public')
-
     const result = []
 
     for (let i = 0, l = articles.length; i < l; i++) {
       const item = articles[i]
-      const isPublic = await isAssigned({ id: publicTagId }) >= 0
 
-      if (isPublic) {
-        result.push(item)
-
-        continue
-      }
-
-      const isAccessible =
-        (request.user === (await posts.getById(item)).author)
-      if (isAccessible) {
+      const isVisible =
+        (await isPublic(item)) ||
+        (request.user && await isAccessible(request.user, item))
+      if (isVisible) {
         result.push(item)
       }
     }

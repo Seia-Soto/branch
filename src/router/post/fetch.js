@@ -1,5 +1,6 @@
+import authenticateOptional from '../../prehandlers/authenticateOptional'
 import { getById } from '../../cache/posts'
-import { exists } from '../../structures/post'
+import { exists, isAccessible, isPublic } from '../../structures/post'
 
 export default {
   method: 'GET',
@@ -25,14 +26,25 @@ export default {
       }
     }
   },
+  preHandler: [
+    authenticateOptional
+  ],
   handler: async (request, response) => {
-    if (await exists({ id: request.params.id }) < 0) {
+    const { id } = request.params
+
+    const isAvailable =
+      (await exists({ id })) &&
+      (
+        (await isPublic(id)) ||
+        (request.user && await isAccessible(request.user, request))
+      )
+    if (!isAvailable) {
       return {
         status: 0
       }
     }
 
-    const item = await getById(request.params.id)
+    const item = await getById(id)
 
     if (!item) {
       return {

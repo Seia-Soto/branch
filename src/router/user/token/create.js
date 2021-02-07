@@ -36,7 +36,7 @@ export default {
 
     const userId = await exists({ email: body.email })
 
-    if (userId < 0 || !await validate(body)) {
+    if (!userId || !await validate(body)) {
       response.status(400)
 
       return {

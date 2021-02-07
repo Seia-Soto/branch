@@ -7,9 +7,9 @@ const exists = async term => {
     .select('id')
     .where(term)
     .limit(1)
-  if (!user) return -1
+  if (!user) return 0
 
-  return user.id
+  return 1
 }
 
 export default exists

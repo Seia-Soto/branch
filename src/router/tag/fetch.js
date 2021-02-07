@@ -52,7 +52,7 @@ export default {
       offset
     }
 
-    if (await exists(query) < 0) {
+    if (await exists(query)) {
       response.status(400)
 
       return {
