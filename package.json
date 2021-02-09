@@ -12,7 +12,8 @@
     "clean": "DEBUG='*' node scripts/clean",
     "lint": "eslint . --ext .js",
     "test": "jest --detectOpenHandles --forceExit",
-    "test:verbose": "DEBUG='branch*' jest --detectOpenHandles --forceExit"
+    "test:verbose": "DEBUG='branch*' jest --detectOpenHandles --forceExit",
+    "pnpify:vsc": "yarn dlx @yarnpkg/pnpify --sdk vscode"
   },
   "keywords": [
     "Content Management System"

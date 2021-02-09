@@ -71,6 +71,10 @@ It is recommended that you to clean database before running it to reduce unexpec
 
 Runs jest test on current project with printing server side mesasges to help debug.
 
+### `yarn pnpify:vsc`
+
+Enable yarn's PnP support for VSCode ESlint.
+
 ## Structures
 
 > **Important**
