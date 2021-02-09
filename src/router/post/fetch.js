@@ -1,6 +1,5 @@
 import authenticateOptional from '../../prehandlers/authenticateOptional'
-import { getById } from '../../cache/posts'
-import { exists, isAccessible, isPublic } from '../../structures/post'
+import { fetch, exists, isAccessible, isPublic } from '../../structures/post'
 
 export default {
   method: 'GET',
@@ -44,7 +43,7 @@ export default {
       }
     }
 
-    const item = await getById(id)
+    const item = await fetch(id)
 
     if (!item) {
       return {
